@@ -16,10 +16,10 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
-const elza = Elza({
-  variable: "--font-elza",
-  subsets: ["latin"],
-});
+// const elza = Elza({
+//   variable: "--font-elza",
+//   subsets: ["latin"],
+// });
 
 export const metadata = {
   title: "Create Next App",
@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        className={`${inter.variable} ${elza.variable} antialiased`}
+        className={`${inter.variable} antialiased`}
 
       >
         {children}
