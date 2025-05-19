@@ -20,10 +20,8 @@ export default function Sidebar({isOpen, toggleSidebar}){
 
     return(
         <>
-        <div className={`sidebar  shadow  bg-[#FFF] h-auto transform transition-all delay-75 ease-in-out ${
-          isOpen ? 'w-[74px]' : 'w-[250px]'
-        }`} >
-            <div className="">
+        <div className={`sidebar  shadow  bg-[#FFF] h-auto transform transition-all delay-75 ease-in-out `} >
+            <div className="h-[100vh]">
                 <div className="togglebar  pb-[22px] border-b-[1px] border-[#D4D4D4] py-[25px] px-[20px]">
                     <button onClick={toggleSidebar} className=" bg-[#E6F4FF] h-[34px] w-[34px] border border-[#E6F4FF] p-[10px] rounded-[5px]" >
                         <span className="w-[14px] h-[2px] bg-[#0E99FF] mb-[2px] block"></span>

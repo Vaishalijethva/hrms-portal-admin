@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="30.507" viewBox="0 0 26 30.507">
+  <g id="Group_620" data-name="Group 620" transform="translate(-1342.487 -6.893)">
+    <g id="bell" transform="translate(1342.487 12.4)">
+      <path id="bell-2" data-name="bell" d="M15.25,3.273V3.6a7.948,7.948,0,0,1,5.625,7.625v7.955H22v2.273H4V19.182H5.125V11.227A7.948,7.948,0,0,1,10.75,3.6V3.273a2.25,2.25,0,1,1,4.5,0ZM7.375,19.182h11.25V11.227a5.625,5.625,0,1,0-11.25,0Zm7.875,4.545V22.591h-4.5v1.136a2.25,2.25,0,1,0,4.5,0Z" transform="translate(-4 -1)" fill="#3c58a4" fill-rule="evenodd"/>
+    </g>
+    <ellipse id="Shape_41" data-name="Shape 41" cx="8" cy="8" rx="8" ry="8" transform="translate(1352.486 6.893)" fill="#e55d31"/>
+    <text id="_5" data-name="5" transform="translate(1357.487 18.894)" fill="#fff" font-size="11" font-family="Archivo-Regular, Archivo"><tspan x="0" y="0">5</tspan></text>
+  </g>
+</svg>

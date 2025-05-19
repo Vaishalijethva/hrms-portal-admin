@@ -2,11 +2,11 @@
 import React, {useState} from "react";
 import Image from "next/image";
 import { motion } from "framer-motion"; 
-import Userimage from "../../public/images/User.png";
-import Lockimage from "../../public/images/Lock.png";  
-import Showimage from "../../public/images/Visible.png";
-import Hideimage from "../../public/images/Visiblehide.svg";
-import Refreshimage from "../../public/images/refresh.svg";
+import Userimage from "../../../public/images/User.png";
+import Lockimage from "../../../public/images/Lock.png";  
+import Showimage from "../../../public/images/Visible.png";
+import Hideimage from "../../../public/images/Visiblehide.svg";
+import Refreshimage from "../../../public/images/refresh.svg";
 
 export default function Login({onLoginSuccess}) { 
     const [showPassword, setShowPassword] = useState(false);
