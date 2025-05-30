@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import GenderRatioChart from "./genderratiochart";
 import StaffDistributionChart from "./staffdistributionchart";
-import EmployeeInformationForm from "../compoents/componentss/EmployeeInformationForm";
+import EmployeeInformationForm from "../EmployeeInformationForm/page";
 import TenurePieChart from "./tenurepiechart";
 import DepartmentWiseEmployees from "./departmentwiseemployees";
 // import MainModule from "./mainmodule";

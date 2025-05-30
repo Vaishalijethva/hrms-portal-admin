@@ -14,7 +14,7 @@ import DashboardModule from "./dashboardmodule";
 import DepartmentWiseEmployees from "./departmentwiseemployees";
 import InOutMetrics from "./in-and-out-metrics";
 import addicon from "../../../public/images/Icon-ion-add-circle-outline.svg";
-import EmployeeInformationForm from "../compoents/componentss/EmployeeInformationForm";
+import EmployeeInformationForm from "../EmployeeInformationForm/page";
 
 
 export default function MainModule({ onLogout, onClick}){

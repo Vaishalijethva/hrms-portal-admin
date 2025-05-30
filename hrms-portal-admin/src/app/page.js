@@ -12,12 +12,12 @@ import ChildLayout from "./components/childLayout";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
 
-  const handleLoginSuccess = () => {
-    //  router.push("/mainmodule"); // or set login state if conditional rendering
-    setIsLoggedIn(true);
-  }
+  // const handleLoginSuccess = () => {
+  //   //  router.push("/mainmodule"); // or set login state if conditional rendering
+  //   setIsLoggedIn(true);
+  // }
 
  
   const handleLogout = () => {
@@ -36,7 +36,8 @@ export default function Home() {
           <MainModule onLogout={handleLogout}/>
          {/* <Sidebar /> */}
         </>
-      {/* ):(
+       {/* ):(
+        // <ChildLayout onLoginSuccess={handleLoginSuccess}/>
         <Login onLoginSuccess={handleLoginSuccess}/>
       )}  */}
     </div>

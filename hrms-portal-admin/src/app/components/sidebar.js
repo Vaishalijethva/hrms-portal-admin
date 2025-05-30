@@ -5,6 +5,7 @@ import Image from "next/image";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faGear, faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useRouter, usePathname } from "next/navigation";
+
 // import {Dashborad_img} from "../../.././public/images/Dashboard.svg";
 
 
@@ -19,7 +20,7 @@ export default function Sidebar({isOpen, toggleSidebar}){
     const menuItems = [
         { name: 'Home', path: '/', icon: ('/images/sidebar_dashboard.svg') },
         { name: 'Report', path: '/report',  icon: ('/images/sidebar_report.svg') },
-        { name: 'Employee', path: '/employee', icon: ('/images/sidebar_employee.svg') },
+        { name: 'Employee', path: '/employeelisting', icon: ('/images/sidebar_employee.svg') },
         { name: 'Leaves and Attendance', path: '/leavesandattendance', icon: ('/images/sidebar_leaves_and_attendance.svg') },
         { name: 'Claim', path: '/claim', icon: ('/images/sidebar_claim.svg') },
         { name: 'New Pension Scheme', path: '/newpensionscheme', icon: ('/images/sidebar_new_pension_scheme.svg')},

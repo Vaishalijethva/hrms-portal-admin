@@ -14,14 +14,19 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "aos": "^2.3.4",
     "apexcharts": "^4.7.0",
+    "custom-select": "^1.1.15",
     "framer-motion": "^12.11.0",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "lucide-react": "^0.511.0",
     "motion": "^12.11.0",
     "next": "15.3.2",
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-apexcharts": "^1.7.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-select": "^5.10.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

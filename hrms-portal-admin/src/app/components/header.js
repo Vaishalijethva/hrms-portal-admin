@@ -2,6 +2,7 @@
 import React,{useEffect, useState, useRef}from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Login from "./login";
 import Logo from "../../../public/images/Logo.svg";
 import Link from "next/link";
 import Search from '../../../public/images/Search.png';
@@ -11,9 +12,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear, faUser, faArrowRightFromBracket, faMoon } from "@fortawesome/free-solid-svg-icons";
 // import {items} from '@/data/items';
 
-export default function Header({isOpen, onLogout, setIsdropdownOpen,isdropdownOpen}){
+export default function Header({isOpen, onLogout, setIsdropdownOpen, isdropdownOpen}) {
     const [searchTerm, setSearchTerm] = useState('');
-    const [showResult, setShowResults] = useState(false);
+    const [showResults, setShowResults] = useState(true);
     const [darkMode, setDarkMode] = useState(false);
     const wrapperRef = useRef(null);
     
@@ -103,7 +104,7 @@ export default function Header({isOpen, onLogout, setIsdropdownOpen,isdropdownOp
     
     return(
         <>
-    
+
         <div className={`header py-[20px] pb-[15px] px-[20px] bg-white dark:bg-black `} >
             <div className="flex items-center justify-between">
                 <div className=" flex items-center ">
@@ -119,7 +120,7 @@ export default function Header({isOpen, onLogout, setIsdropdownOpen,isdropdownOp
                 <div className="search_sec relative max-w-[482px] w-full" ref={wrapperRef}>
                     <input type="text" placeholder="Search... " value={searchTerm} onFocus={() => setShowResults(true)} onChange={(e) => setSearchTerm(e.target.value)} className="header_search w-full bg-[#E6F4FF] "/>
                     <div className="absolute right-[10px] top-[50%] transform translate-y-[-50%]"><Image src={Search} alt="search"/></div>
-                    {showResult && searchTerm.length > 0 && (
+                    {showResults && searchTerm.length > 0 && (
                     <ul className="absolute w-full p-[10px] bg-FFFFFF">
                         {filteredItems.length > 0 ? (
                             filteredItems.map((item) => (
@@ -195,7 +196,17 @@ export default function Header({isOpen, onLogout, setIsdropdownOpen,isdropdownOp
                                 <ul className="py-2 px-2">
                                     <li><Link href="\" className="block px-2 py-2 text-[16px] leading-[20px] font-normal text-[#323232] hover:bg-[#e6f4ff] rounded-8 transition-transform duration-75 ease-in-out"><FontAwesomeIcon icon={faUser} className="pr-3"/>Profile</Link></li>
                                     <li><Link href="\" className="block px-2 py-2 text-[16px] leading-[20px] font-normal text-[#323232] hover:bg-[#e6f4ff] rounded-8"><FontAwesomeIcon icon={faGear} className="pr-2"/>Setting</Link></li>
-                                    <li className="block px-2 py-2 text-[16px] leading-[20px] font-normal text-[#323232] hover:bg-[#e6f4ff] rounded-8  cursor-pointer" onClick={onLogout}><FontAwesomeIcon icon={faArrowRightFromBracket} className="pr-2"/>Logout</li>
+                                    <li
+                                        className="block px-2 py-2 text-[16px] leading-[20px] font-normal text-[#323232] hover:bg-[#e6f4ff] rounded-8  cursor-pointer"
+                                        onClick={() => {
+                                            if (typeof onLogout === "function") {
+                                                onLogout();
+                                            }
+                                            setIsdropdownOpen(null);
+                                        }}
+                                    >
+                                        <FontAwesomeIcon icon={faArrowRightFromBracket} className="pr-2"/>Logout
+                                    </li>
                                 </ul>
                             </motion.div>
                             

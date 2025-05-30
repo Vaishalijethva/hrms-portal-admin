@@ -1,4 +1,5 @@
-import { useState } from "react";
+"use client";
+import React,{ useState } from "react";
 import Link from "next/link";
 import { Calendar, ChevronDown } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

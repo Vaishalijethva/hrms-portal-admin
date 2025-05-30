@@ -3,10 +3,12 @@ import React, {useState} from 'react';
 import Sidebar from '../components/sidebar';
 import Header from '../components/header';
 
-export default function ChildLayout({ children, onClick, onLogout}) { 
+export default function ChildLayout({ children, onLogout}) { 
      const [isOpen, setIsOpen] = useState(true);
      const [isdropdownOpen, setIsdropdownOpen] = useState(null);
      const toggleSidebar = () => setIsOpen(!isOpen);
+
+     
     return (
         <>
             <div className="main-module">

@@ -1,6 +1,6 @@
 // import { Geist, Geist_Mono } from "next/font/google";
 'use client';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {  Inter, Elza } from "next/font/google";
 import "./globals.css";
 import ChildLayout from "./components/childLayout";
@@ -35,17 +35,26 @@ const inter = Inter({
 export default function RootLayout({ children }) {
 
    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  //  const [loading, setLoading] = useState(true);
     const router = useRouter();
   
+  // useEffect(() => {
+  //   const loggedIn = localStorage.getItem("loggedIn") === "true";
+  //   setIsLoggedIn(loggedIn);
+  //   setLoading(false);
+  // },[])
+
     const handleLoginSuccess = () => {
-      //  router.push("/mainmodule"); // or set login state if conditional rendering
+      // localStorage.setItem("loggedIn", "true");
       setIsLoggedIn(true);
     }
   
    
     const handleLogout = () => {
+      //  localStorage.removeItem('loggedIn')
       setIsLoggedIn(false);
     }
+    // if (loading) return null;
 
   return (
     <html lang="en">
@@ -55,7 +64,7 @@ export default function RootLayout({ children }) {
 
       >
         {isLoggedIn ? (
-           <ChildLayout>{children}</ChildLayout>
+           <ChildLayout onLogout={handleLogout}>{children}</ChildLayout>
            ):(
                   <Login onLoginSuccess={handleLoginSuccess}/>
                 )} 
