@@ -8,7 +8,11 @@ import pdficon from "../../../public/images/pdf.svg";
 import Select from "react-select";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import autoTable from "jspdf-autotable"; 
+// import {useTable} from "react-table";
+import DataTable from 'react-data-table-component';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function EmployeeListing() {
 
@@ -282,7 +286,7 @@ export default function EmployeeListing() {
             emp.type
         ]);
 
-        autoTable(doc, {
+        doc.autoTable({
             head: [tableColumn],
             body: tableRows,
             startY: 20,
@@ -405,8 +409,8 @@ export default function EmployeeListing() {
                             </select>
                         </div>
                         <div className="flex items-center gap-2">
-                            <button onClick={handlePrev} className="px-[25px] py-[9px] border rounded hover:bg-gray-100" disabled={currentPage === 1}> Previous Page </button>
-                            <button onClick={handleNext} className="px-[25px] py-[9px] bg-blue-500 text-white rounded hover:bg-blue-600" disabled={currentPage === totalPages}> Next Page </button>
+                            <button onClick={handlePrev} className="pl-[20px] pr-[25px] py-[9px] border rounded hover:bg-gray-100 cursor-pointer" disabled={currentPage === 1}> <FontAwesomeIcon icon={faAngleLeft}  className="pr-[10px]"/> Previous Page </button>
+                            <button onClick={handleNext} className="pl-[25px] pr-[20px] py-[9px] bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer" disabled={currentPage === totalPages}>  Next Page <FontAwesomeIcon icon={faAngleRight}  className="pl-[10px]"/></button>
                         </div>
                         <div className="flex items-center gap-3">
                             <button onClick={handleGoToPageOne} className="underline text-[#0E99FF]">Go to Page 1</button>

@@ -1,10 +1,14 @@
 "use client";
-import React,{ useState } from "react";
+import React,{ useEffect, useState } from "react";
 import Link from "next/link";
-import { Calendar, ChevronDown } from "lucide-react";
+import { Calendar, ChevronDown, Images } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+
+import Image from "next/image";
+import {editicon} from "../../../public/images/editicon.svg"
+import Select from "react-select";
 
 // Custom Select Component
 const CustomSelect = ({
@@ -23,7 +27,7 @@ const CustomSelect = ({
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="text-gray-500">{value || placeholder}</span>
-        <ChevronDown className="w-4 h-4 text-gray-500 text-[#0E99FF]" />
+        <ChevronDown className="w-4 h-4 font-bold text-[#0E99FF]" />
       </button>
 
       {isOpen && (
@@ -45,6 +49,9 @@ const CustomSelect = ({
     </div>
   );
 };
+
+
+
 
 // Custom File Upload Component
 const FileUpload = ({ onChange }) => {
@@ -178,7 +185,27 @@ const EmployeeInformationForm = () => {
     pfNo: "",
     maritalStatus: "",
     bloodGroup: "",
+    corporatemobileno: "",
+    corporateemailaddress: "",
+    personalmobileno: "",
+    personalemail: "",
+    blockno: "",
+    buildingname: "",
+    streetaddress1: "",
+    streetaddress2: "",
+    pincode: "",
+    ifsccode: "",
+    bankaccountno: "",
+    noticeperiod: "",
+    retirementage: "",
+    probationperiod: "",
+    name:"",
+    contactno: "",
+
+
   });
+
+
 
   const handleInputChange = (field, value) => {
     setFormData({
@@ -202,6 +229,64 @@ const EmployeeInformationForm = () => {
     });
   };
 
+  const [supervisions, setSupervisions] = useState([
+    {startDate: "", endDate: "", headofdepartment: "", reportingmanager: "" },
+  ]);
+
+  const [previousemployee, setPreviousemployee] = useState([
+    {startDate:"", endDate: "", companyname:"", designation: ""},
+  ]);
+
+  const [familymember, setFamilymember] = useState([
+    {name: "", relation: "", gender: "", dateofbirth: "", maritalstatus: "", contactno: "", contactedemergency: ""},
+  ])
+
+  const handleSupervisionChange = (index, field, value) => {
+    const updated = [...supervisions];
+    updated[index][field] = value; 
+    setSupervisions(updated);
+  }
+  const handlePreviousemployeeChange = (index, field, value) => {
+    const updated = [...previousemployee];
+    updatedList[index][field] = value;
+    setPreviousemployee(updated);
+  }
+
+  const handleFamilyChange = (index, field, value) => {
+    const updated = [...familymember];
+    updatefamilymember[index][field] = value;
+    setFamilymember(updated);
+  }
+
+  const addSupervision = () => {
+    setSupervisions([
+      ...supervisions, 
+      { startDate: "", endDate: "", headofdepartment: "", reportingmanager: ""},
+    ])
+  }
+  const deleteSupervision = (indexToDelete) => {
+    const updated = supervisions.filter((_, i) => i !== indexToDelete);
+    setSupervisions(updated);
+  };
+
+  const addFamilymember = () => {
+    setFamilymember([
+      ...familymember,
+      {name: "", relation: "", gender: "", dateofbirth: "", maritalstatus: "", contactno: "", contactedemergency: "" },
+    ])
+  }
+
+  const deleteFamilymember = (indexToDelete) => {
+    const updated = familymember.filter((_, i) => i !== indexToDelete);
+    setFamilymember(updated);
+  }
+  // const addPreviousemployee = () => {
+  //   setPreviousemployee([
+  //     ...previousemployee,
+  //     { startDate: "", endDate: "", companyname: "", designation: ""},
+  //   ])
+  // }
+
   const tabs = [
     "Primary Details",
     "Contact & Bank Details",
@@ -209,6 +294,9 @@ const EmployeeInformationForm = () => {
     "Family",
     "Other",
   ];
+
+  const contactedemergency = ["yes", "No"];
+  const [selectedRadioButton, setSelectedRadioButton] = useState("");
 
   const genderOptions = ["Male", "Female", "Other"];
   const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Others"];
@@ -218,8 +306,120 @@ const EmployeeInformationForm = () => {
   const maritalStatusOptions = ["Single", "Married", "Divorced", "Widowed"];
   const bloodGroupOptions = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const salutationOptions = ["Mr.", "Mrs.", "Ms.", "Dr."];
+  const addresstype =["permanent", "work"]
+  const country = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Austrian Empire*", "Azerbaijan", "Baden*", "Bahamas, The", "Bahrain", "Bangladesh", "Barbados", "Bavaria*", "Belarus", "Belgium", "Belize", "Benin (Dahomey)", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Brunswick and Lüneburg*", "Bulgaria", "Burkina Faso (Upper Volta)", "Burma", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Cayman Islands, The", "Central African Republic", "Central American Federation* ", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo Free State, The* ", "Cook Islands", "Costa Rica", "Cote d’Ivoire (Ivory Coast)", "Croatia", "Cuba", "Cyprus", "Czechia", "Czechoslovakia*", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Duchy of Parma, The*", "East Germany (German Democratic Republic)* ", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Federal Government of Germany (1848-49)*", "Fiji", "Finland", "France", "Gabon", "Gambia, The", "Georgia", "Germany", "Ghana", "Grand Duchy of Tuscany, The* ", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Hanover*", "Hanseatic Republics*", "Hawaii*", "Hesse*", "Holy See", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kingdom of Serbia/Yugoslavia*", "Kiribati", "Korea", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Lew Chew (Loochoo)*", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mecklenburg-Schwerin*", "Mecklenburg-Strelitz* ", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Namibia", 
+  "Nassau*", "Nauru", "Nepal", "Netherlands, The", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "North German Confederation*", "North German Union*", "North Macedonia", "Norway", "Oldenburg*", "Oman", "Orange Free State*", "Pakistan", "Palau", "Panama", "Papal States* ", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Piedmont-Sardinia*", "Poland", "Portugal", "Qatar", "Republic of Genoa*", "Republic of Korea (South Korea)", "Republic of the Congo", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Schaumburg-Lippe*", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands, The", "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Tajikistan", "Tanzania", "Texas*", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Two Sicilies*", "Uganda", "Ukraine", "Union of Soviet Socialist Republics*", "United Arab Emirates, The", "United Kingdom, The", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Württemberg*", "Yemen", "Zambia", "Zimbabwe"]
+  const state = ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Maharashtra", "Madhya Pradesh", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Tripura", "Telangana", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman & Nicobar (UT)", "Chandigarh (UT)", "Dadra & Nagar Haveli and Daman & Diu (UT)", "Delhi [National Capital Territory (NCT)]", "Jammu & Kashmir (UT)", "Ladakh (UT)", "Lakshadweep (UT)", "Puducherry (UT)"]
+  const city = [ "Port Blair","Adoni", "Amaravati", "Anantapur", "Chandragiri", "Chittoor", "Dowlaiswaram", "Eluru", "Guntur", "Kadapa","Kakinada", "Kurnool", "Machilipatnam", "Nagarjunakoṇḍa", "Rajahmundry", "Srikakulam", "Tirupati", "Vijayawada", "Visakhapatnam", "Vizianagaram", "Yemmiganur", "Itanagar", "Dhuburi", "Dibrugarh", "Dispur", "Guwahati", "Jorhat", "Nagaon", "Sivasagar", "Silchar", "Tezpur", "Tinsukia", "Ara", "Barauni", "Begusarai", "Bettiah", "Bhagalpur", "Bihar Sharif", "Bodh Gaya", "Buxar", "Chapra", "Darbhanga", "Dehri", "Dinapur Nizamat", "Gaya", "Hajipur", "Jamalpur", "Katihar", "Madhubani", "Motihari", "Munger", "Muzaffarpur", "Patna", "Purnia", "Pusa", "Saharsa", "Samastipur"]
+  const bankname =[ "Bank of Baroda", "State Bank of india", "Bank of India", "HDFC Bank", "ICICI Bank"]
+  const bankbranchname = ["Main", "Maninagar", "Naherunagar", "Vadaj"]
+  const relation = ["father", "mother", "sister", "brother"]
+  const gender = ["Female", "Male", "Other"]
+  const maritalstatus = ["Unmarried", "Married", "Diocese"]
 
   const [showModel, setShowModal] = useState(false);
+
+  /* edit details table */
+  useEffect(() =>  {
+   const supervisiondata= [
+    { 
+      startDate: "09/10/2024",
+      endDate: "09/10/2025",
+      headofdepartment: "Michael McCoy",
+      reportingmanager: "John Yeager", 
+    }
+   ];
+    setSupervisionList(supervisiondata);
+   }, []);
+
+   useEffect(() => {
+    const previousemployeedata = [
+      {
+        startDate: "09/10/2024",
+        endDate: "09/10/2025",
+        companyname: "Lorem ipsum dolor",
+        designation: "Lorem Ipsum", 
+      }
+    ];
+    setPreviousemployee(previousemployeedata);
+   }, []);
+
+   useEffect(() => {
+    const familydata = [
+      {
+        name: "Michael McCoy",
+        relation: "Father",
+        gender: "Male",
+        dob: "23/04/1971",
+        maritalstatus: "Married",
+        contactno: "+91 00000 00000"
+      },
+      {
+        name: "Rose McCoy",
+        relation: "Mother",
+        gender: "Female",
+        dob: "17/01/1974",
+        maritalstatus: "Married",
+        contactno: "+91 00000 00000"
+      }
+    ];
+    setFamilymember(familydata);
+   })
+  const [supervisionList, setSupervisionList] = useState([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isPreviousemployeeEditModalOpen, setIsPreviousemployeeEditModalOpen] = useState(false);
+  const [isFamilyEditModalOpen, setIsFamilyEditModalOpen] = useState(false);
+  // const [editData, setEditData] = useState(null);
+  // const [previousemployee, setPreviousEmployee] = useState([]);
+  const [editData, setEditData] = useState({
+    startDate: '',
+    endDate: '',
+    headofdepartment: '',
+    reportingmanager: '',
+  });
+  const [editIndex, setEditIndex] = useState(null);
+
+  const [previousemployeeeditData, setPreviousemployeeEditData] = useState({
+    startDate: '',
+    endDate: '',
+    companyname: '',
+    designation: '',
+  });
+  const [previousemployeeeditIndex, setPreviousemployeeEditIndex] = useState(null)
+
+  const [familyeditData, setFamilyEditData] = useState({
+    name: '',
+    relation: '',
+    gender: '', 
+    dob: '',
+    maritalstatus: '',
+    contactno: ''
+  });
+  const [familyeditIndex, setFamilyEditIndex] = useState(null)
+
+  const handleSave = () => {
+  const updated = [...supervisionList];
+  updated[editIndex] = editData;
+  setSupervisionList(updated);
+  setIsEditModalOpen(false);
+  };
+
+  const handlePrevEmpSave = () => {
+    const updatedList = [...previousemployee];
+    updatedList[previousemployeeeditIndex] = previousemployeeeditData;
+    setPreviousemployeeEditData(false);
+    setPreviousemployee(updatedList);
+    setIsPreviousemployeeEditModalOpen(false);
+  };
+
+  const handleFamilySave = () => {
+    const updatefamilymember = [...familymember];
+    updatefamilymember[familyeditIndex] = familyeditData;
+    setFamilyEditData(false);
+    setFamilymember(updatefamilymember);
+    setIsFamilyEditModalOpen(false);
+  }
+ 
 
   return (
     <div className="bg-[#F8FBFE] p-6 rounded-lg shadow-sm overflow-y-auto">
@@ -285,6 +485,7 @@ const EmployeeInformationForm = () => {
             <h2 className="text-md font-medium text-gray-700 mb-4">
               Basic Information
             </h2>
+            
             <div className="grid grid-cols-4 gap-6">
               {/* Profile Photo */}
               <div className="col-span-1">
@@ -306,6 +507,7 @@ const EmployeeInformationForm = () => {
                       onChange={(e) =>
                         handleInputChange("employeeCode", e.target.value)
                       }
+                      required
                     />
                   </div>
                   <div>
@@ -623,7 +825,7 @@ const EmployeeInformationForm = () => {
               {/* Buttons */}
               <div className="col-span-4 flex space-x-2 mt-4">
                 <button
-                  type="button"
+                  type="submit"
                   className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onClick={() => setShowModal(true)}
                 >
                   Save & Next
@@ -636,6 +838,7 @@ const EmployeeInformationForm = () => {
                 </button>
               </div>
             </div>
+            
           </div>
         )}
         {activeTab === "Contact & Bank Details" && (
@@ -644,91 +847,106 @@ const EmployeeInformationForm = () => {
             Contact & Bank Details
             </h2>
             <div className="grid grid-cols-4 gap-6">
-              {/* Profile Photo */}
-              <div className="col-span-1">
-                <div className="mb-1 text-sm font-medium">Profile Photo</div>
-                <FileUpload onChange={handleFileChange} />
-              </div>
-
               {/* First Row */}
-              <div className="col-span-3 grid grid-cols-3 gap-6">
-                <div className="col-span-4 grid grid-cols-3 gap-6">
+              <div className="col-span-4 grid grid-cols-4 gap-6">
+                <div className="col-span-4 grid grid-cols-4 gap-6">
                   <div className="col-span-1">
                     <div className="mb-1 text-sm font-medium">
-                      Employee Code <span className="text-red-500">*</span>
+                      Corporate Mobile No. <span className="text-red-500">*</span>
                     </div>
                     <input
-                      type="text"
+                      type="number"
                       className="w-full px-3 py-2 border rounded-md"
-                      value={formData.employeeCode}
+                      value={formData.corporatemobileno}
                       onChange={(e) =>
-                        handleInputChange("employeeCode", e.target.value)
+                        handleInputChange("corporatemobileno", e.target.value)
                       }
+                      placeholder="+91 0000000000"
+                      required
                     />
                   </div>
                   <div>
                     <div className="mb-1 text-sm font-medium">
-                      Join Date <span className="text-red-500">*</span>
+                      Corporate Email Address <span className="text-red-500">*</span>
                     </div>
-                    <DatePicker
+                    {/* <DatePicker
                       value={formData.joinDate}
                       onChange={(value) => handleInputChange("joinDate", value)}
                       placeholder="DD/MM/YYYY"
-                    />
+                    /> */}
+                    <input type="email" className="w-full px-3 py-2 border rounded-md" value={formData.corporateemailaddress} onChange={(e) => handleInputChange("corporate email address", e.target.value)} placeholder="aaa@gmail.com" required />
                   </div>
                   <div>
                     <div className="mb-1 text-sm font-medium">
-                      Salutation <span className="text-red-500">*</span>
+                      Personal Mobile No. <span className="text-red-500">*</span>
                     </div>
-                    <CustomSelect
+                    {/* <CustomSelect
                       options={salutationOptions}
                       placeholder="Select"
                       value={formData.salutation}
                       onChange={(value) => handleInputChange("salutation", value)} 
-                    />
+                    /> */}
+                     <input type="number" className="w-full px-3 py-2 border rounded-md" value={formData.personalmobileno} onChange={(e) => handleInputChange("Personal Mobile No.", e.target.value)} placeholder="+91 00000 00000" required />
+                  </div>
+                  <div>
+                    <div className="mb-1 text-sm font-medium">
+                        Personal Email<span className="text-red-500">*</span>
+                    </div>
+                    <input type="email" className="w-full px-3 py-2 border rounded-md" value={formData.employeeCode} onChange={(e) => handleInputChange("employeeCode", e.target.value)} placeholder="aaa@gmail.com" required />
                   </div>
                 </div>
                 {/* Name Fields */}
-                <div className="col-span-4 grid grid-cols-3 gap-6">
-                  <div>
+                <div className="col-span-4 grid grid-cols-4 gap-6">
+                   <div>
                     <div className="mb-1 text-sm font-medium">
-                      First Name <span className="text-red-500">*</span>
+                      Address Type <span className="text-red-500">*</span>
                     </div>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded-md"
-                      placeholder="Enter first name"
-                      value={formData.firstName}
-                      onChange={(e) =>
-                        handleInputChange("firstName", e.target.value)
-                      }
+                    <CustomSelect
+                      options={addresstype}
+                      placeholder="Select"
+                      value={formData.addresstype}
+                      onChange={(value) => handleInputChange("Address Type", value)} 
                     />
                   </div>
                   <div>
                     <div className="mb-1 text-sm font-medium">
-                      Middle Name <span className="text-red-500">*</span>
+                      Block No. <span className="text-red-500">*</span>
                     </div>
                     <input
-                      type="text"
+                      type="number"
                       className="w-full px-3 py-2 border rounded-md"
-                      placeholder="Enter middle name"
+                      placeholder="00"
                       value={formData.middleName}
                       onChange={(e) =>
-                        handleInputChange("middleName", e.target.value)
+                        handleInputChange("BlockNo", e.target.value)
                       }
                     />
                   </div>
                   <div>
                     <div className="mb-1 text-sm font-medium">
-                      Last Name <span className="text-red-500">*</span>
+                      Building Name <span className="text-red-500">*</span>
                     </div>
                     <input
                       type="text"
                       className="w-full px-3 py-2 border rounded-md"
-                      placeholder="Enter last name"
+                      placeholder="Lorem ipsum"
                       value={formData.lastName}
                       onChange={(e) =>
-                        handleInputChange("lastName", e.target.value)
+                        handleInputChange("BuildingName", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div>
+                    <div className="mb-1 text-sm font-medium">
+                      Street Address 1 <span className="text-red-500">*</span>
+                    </div>
+                    <input
+                      type="text"
+                      className="w-full px-3 py-2 border rounded-md"
+                      placeholder="Enter Street Address"
+                      value={formData.lastName}
+                      onChange={(e) =>
+                        handleInputChange("Enter Street Address", e.target.value)
                       }
                     />
                   </div>
@@ -738,50 +956,50 @@ const EmployeeInformationForm = () => {
               <div className="col-span-4 grid grid-cols-4 gap-6">
                 <div>
                   <div className="mb-1 text-sm font-medium">
-                    Name As Per Aadhaar <span className="text-red-500">*</span>
+                    Street Address 2 <span className="text-red-500">*</span>
                   </div>
                   <input
                     type="text"
                     className="w-full px-3 py-2 border rounded-md"
                     value={formData.nameAsPerAadhaar}
                     onChange={(e) =>
-                      handleInputChange("nameAsPerAadhaar", e.target.value)
+                      handleInputChange("Street Address 2", e.target.value)
                     }
                   />
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
-                    Father Name <span className="text-red-500">*</span>
+                    Area Name <span className="text-red-500">*</span>
                   </div>
                   <input
                     type="text"
                     className="w-full px-3 py-2 border rounded-md"
                     value={formData.fatherName}
                     onChange={(e) =>
-                      handleInputChange("fatherName", e.target.value)
+                      handleInputChange("Area Name", e.target.value)
                     }
                   />
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
-                    Employment Type <span className="text-red-500">*</span>
+                    Country <span className="text-red-500">*</span>
                   </div>
                   <CustomSelect
-                    options={employmentTypeOptions}
+                    options={country}
                     placeholder="Select"
-                    value={formData.employmentType}
-                    onChange={(value) => handleInputChange("employmentType", value)}
+                    value={formData.country}
+                    onChange={(value) => handleInputChange("country", value)} 
                   />
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
-                    Unit <span className="text-red-500">*</span>
+                    State <span className="text-red-500">*</span>
                   </div>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-md"
-                    value={formData.unit}
-                    onChange={(e) => handleInputChange("unit", e.target.value)}
+                  <CustomSelect
+                    options={state}
+                    placeholder="Select"
+                    value={formData.state}
+                    onChange={(value) => handleInputChange("State", value)} 
                   />
                 </div>
               </div>
@@ -790,100 +1008,87 @@ const EmployeeInformationForm = () => {
               <div className="col-span-4 grid grid-cols-4 gap-6">
                 <div>
                   <div className="mb-1 text-sm font-medium">
-                    Division <span className="text-red-500">*</span>
-                  </div>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-md"
-                    value={formData.division}
-                    onChange={(e) => handleInputChange("division", e.target.value)}
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Department <span className="text-red-500">*</span>
+                    City <span className="text-red-500">*</span>
                   </div>
                   <CustomSelect
-                    options={["HR", "Finance", "Operations", "IT", "Section IX"]}
+                    options={city}
                     placeholder="Select"
-                    value={formData.department}
-                    onChange={(value) => handleInputChange("department", value)}
+                    value={formData.city}
+                    onChange={(value) => handleInputChange("city", value)} 
                   />
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
-                    Designation <span className="text-red-500">*</span>
+                    Pin Code <span className="text-red-500">*</span>
                   </div>
                   <input
-                    type="text"
+                    type="number"
                     className="w-full px-3 py-2 border rounded-md"
-                    value={formData.designation}
-                    onChange={(e) =>
-                      handleInputChange("designation", e.target.value)
-                    }
+                    value={formData.pincode}
+                    onChange={(e) => handleInputChange("Pincode", e.target.value)}
                   />
                 </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Work Location <span className="text-red-500">*</span>
-                  </div>
-                  <CustomSelect
-                    options={["Head Office", "Branch Office", "Remote"]}
-                    placeholder="Select"
-                    value={formData.workLocation}
-                    onChange={(value) => handleInputChange("workLocation", value)}
-                  />
-                </div>
+               
               </div>
 
               {/* Work Location, DOB, Gender */}
-              <div className="col-span-4 grid grid-cols-4 gap-6">
+              <div className="col-span-4 grid grid-cols-4 gap-6  border-0 border-t-2 border-t-[#D4D4D4] pt-5">
+              <h2 className="text-md font-medium text-gray-700 mb-1">
+                   Contact & Bank Details
+                </h2>
+              
+              </div>
+              <div className="col-span-4 grid grid-cols-4 gap-6  ">
+                
                 <div>
                   <div className="mb-1 text-sm font-medium">
-                    Date of Birth <span className="text-red-500">*</span>
+                    IFSC Code <span className="text-red-500">*</span>
                   </div>
-                  <DatePicker
-                    value={formData.dateOfBirth}
-                    onChange={(value) => handleInputChange("dateOfBirth", value)}
-                    placeholder="--/--/----"
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 border rounded-md"
+                    value={formData.ifsccode}
+                    onChange={(e) => handleInputChange("IFSC Code", e.target.value)}
+                    placeholder="XXXX0000000"
                   />
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
-                    Gender <span className="text-red-500">*</span>
+                    Bank Name <span className="text-red-500">*</span>
                   </div>
                   <CustomSelect
-                    options={genderOptions}
+                    options={bankname}
                     placeholder="Select"
-                    value={formData.gender}
-                    onChange={(value) => handleInputChange("gender", value)}
+                    value={formData.bankname}
+                    onChange={(value) => handleInputChange("Bank Name", value)}
                   />
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
-                    Religion <span className="text-red-500">*</span>
+                    Bank Branch Name <span className="text-red-500">*</span>
                   </div>
                   <CustomSelect
-                    options={religionOptions}
+                    options={bankbranchname}
                     placeholder="Select"
-                    value={formData.religion}
-                    onChange={(value) => handleInputChange("religion", value)}
+                    value={formData.bankbranchname}
+                    onChange={(value) => handleInputChange("Bank Branch Name", value)}
                   />
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
-                    Nationality <span className="text-red-500">*</span>
+                    Bank A/C No. <span className="text-red-500">*</span>
                   </div>
-                  <CustomSelect
-                    options={nationalityOptions}
-                    placeholder="Select"
-                    value={formData.nationality}
-                    onChange={(value) => handleInputChange("nationality", value)}
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 border rounded-md"
+                    value={formData.bankaccountno}
+                    onChange={(e) => handleInputChange("Bank Account No.", e.target.value)}
+                    placeholder="Enter bank A/C no."
                   />
                 </div>
               </div>
 
-              {/* Nationality, Service Agreement, Aadhaar */}
+              {/* Nationality, Service Agreement, Aadhaar
               <div className="col-span-4 grid grid-cols-4 gap-6">
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -932,10 +1137,10 @@ const EmployeeInformationForm = () => {
                     onChange={(e) => handleInputChange("esicNo", e.target.value)}
                   />
                 </div>
-              </div>
+              </div> */}
 
               {/* ESIC, UAN, PF */}
-              <div className="col-span-4 grid grid-cols-4 gap-6">
+              {/* <div className="col-span-4 grid grid-cols-4 gap-6">
                 <div>
                   <div className="mb-1 text-sm font-medium">UAN No.</div>
                   <input
@@ -976,10 +1181,16 @@ const EmployeeInformationForm = () => {
                     onChange={(value) => handleInputChange("bloodGroup", value)}
                   />
                 </div>
-              </div>
+              </div>  */}
 
               {/* Buttons */}
               <div className="col-span-4 flex space-x-2 mt-4">
+                <button
+                  type="button"
+                  className="px-4 py-2 border border-[#888888] text-[#888888] rounded-md hover:bg-[#888888] hover:text-[#FFF] transition-all delay-75 ease-in-out cursor-pointer" onClick={() => setShowModal(true)}
+                >
+                 Previous Page
+                </button>
                 <button
                   type="button"
                   className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onClick={() => setShowModal(true)}
@@ -1000,44 +1211,15 @@ const EmployeeInformationForm = () => {
           <div>
             <h2 className="text-md font-medium text-gray-700 mb-4">
             {/* Contact & Bank Details */}
-            {activeTab}
+            Job
             </h2>
             <div className="grid grid-cols-4 gap-6">
-              {/* Profile Photo */}
-              <div className="col-span-1">
-                <div className="mb-1 text-sm font-medium">Profile Photo</div>
-                <FileUpload onChange={handleFileChange} />
-              </div>
-
               {/* First Row */}
-              <div className="col-span-3 grid grid-cols-3 gap-6">
-                <div className="col-span-4 grid grid-cols-3 gap-6">
+              <div className="col-span-4 grid grid-cols-4 gap-6">
+                <div className="col-span-4 grid grid-cols-4 gap-6">
                   <div className="col-span-1">
                     <div className="mb-1 text-sm font-medium">
-                      Employee Code <span className="text-red-500">*</span>
-                    </div>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded-md"
-                      value={formData.employeeCode}
-                      onChange={(e) =>
-                        handleInputChange("employeeCode", e.target.value)
-                      }
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-sm font-medium">
-                      Join Date <span className="text-red-500">*</span>
-                    </div>
-                    <DatePicker
-                      value={formData.joinDate}
-                      onChange={(value) => handleInputChange("joinDate", value)}
-                      placeholder="DD/MM/YYYY"
-                    />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-sm font-medium">
-                      Salutation <span className="text-red-500">*</span>
+                     Employment Type <span className="text-red-500">*</span>
                     </div>
                     <CustomSelect
                       options={salutationOptions}
@@ -1046,127 +1228,333 @@ const EmployeeInformationForm = () => {
                       onChange={(value) => handleInputChange("salutation", value)} 
                     />
                   </div>
+                  <div>
+                    <div className="mb-1 text-sm font-medium">
+                      Service Type <span className="text-red-500">*</span>
+                    </div>
+                    {/* <DatePicker
+                      value={formData.joinDate}
+                      onChange={(value) => handleInputChange("joinDate", value)}
+                      placeholder="DD/MM/YYYY"
+                    /> */}
+                    <CustomSelect
+                      options={salutationOptions}
+                      placeholder="Select"
+                      value={formData.salutation}
+                      onChange={(value) => handleInputChange("salutation", value)} 
+                    />
+                  </div>
+                  <div>
+                    <div className="mb-1 text-sm font-medium">
+                      Notice Period <span className="text-red-500">*</span>
+                    </div>
+                    <input
+                      type="text"
+                      className="w-full px-3 py-2 border rounded-md"
+                      placeholder="Notice Period"
+                      value={formData.noticeperiod}
+                      onChange={(e) =>
+                        handleInputChange("Notice Period", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div>
+                    <div className="mb-1 text-sm font-medium">
+                      Retirement Age <span className="text-red-500">*</span>
+                    </div>
+                    <input
+                      type="text"
+                      className="w-full px-3 py-2 border rounded-md"
+                      placeholder="Notice Period"
+                      value={formData.noticeperiod}
+                      onChange={(e) =>
+                        handleInputChange("Notice Period", e.target.value)
+                      }
+                    />
+                  </div>
                 </div>
                 {/* Name Fields */}
-                <div className="col-span-4 grid grid-cols-3 gap-6">
+                <div className="col-span-4 grid grid-cols-4 gap-6">
                   <div>
                     <div className="mb-1 text-sm font-medium">
-                      First Name <span className="text-red-500">*</span>
+                      Probation Period <span className="text-red-500">*</span>
                     </div>
                     <input
                       type="text"
                       className="w-full px-3 py-2 border rounded-md"
-                      placeholder="Enter first name"
-                      value={formData.firstName}
+                      placeholder="Probation Period"
+                      value={formData.probationperiod}
                       onChange={(e) =>
-                        handleInputChange("firstName", e.target.value)
+                        handleInputChange("Probation Period", e.target.value)
                       }
                     />
                   </div>
                   <div>
                     <div className="mb-1 text-sm font-medium">
-                      Middle Name <span className="text-red-500">*</span>
+                      Shift Effective Date <span className="text-red-500">*</span>
                     </div>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded-md"
-                      placeholder="Enter middle name"
-                      value={formData.middleName}
-                      onChange={(e) =>
-                        handleInputChange("middleName", e.target.value)
-                      }
+                   <DatePicker
+                      value={formData.shifteffectivedate}
+                      onChange={(value) => handleInputChange("Shift Effective Date", value)}
+                      placeholder="DD/MM/YYYY"
+                    /> 
+                  </div>
+                  <div>
+                    <div className="mb-1 text-sm font-medium">
+                      Shift <span className="text-red-500">*</span>
+                    </div>
+                    <CustomSelect
+                      options={salutationOptions}
+                      placeholder="Select"
+                      value={formData.salutation}
+                      onChange={(value) => handleInputChange("salutation", value)} 
                     />
                   </div>
                   <div>
                     <div className="mb-1 text-sm font-medium">
-                      Last Name <span className="text-red-500">*</span>
+                      Week Off Effective Date <span className="text-red-500">*</span>
                     </div>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded-md"
-                      placeholder="Enter last name"
-                      value={formData.lastName}
-                      onChange={(e) =>
-                        handleInputChange("lastName", e.target.value)
-                      }
+                    <DatePicker
+                      value={formData.shifteffectivedate}
+                      onChange={(value) => handleInputChange("Shift Effective Date", value)}
+                      placeholder="DD/MM/YYYY"
                     />
                   </div>
                 </div>
               </div>
-              {/* Aadhaar and Father Name */}
+              {/*  Weekly Off Pattern */}
               <div className="col-span-4 grid grid-cols-4 gap-6">
                 <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Name As Per Aadhaar <span className="text-red-500">*</span>
+                    <div className="mb-1 text-sm font-medium">
+                      Weekly Off Pattern <span className="text-red-500">*</span>
+                    </div>
+                    <CustomSelect
+                      options={salutationOptions}
+                      placeholder="Select"
+                      value={formData.salutation}
+                      onChange={(value) => handleInputChange("salutation", value)} 
+                    />
                   </div>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-md"
-                    value={formData.nameAsPerAadhaar}
-                    onChange={(e) =>
-                      handleInputChange("nameAsPerAadhaar", e.target.value)
-                    }
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Father Name <span className="text-red-500">*</span>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+              {/* Superior */}
+              {supervisions.map((sup, index) => (
+                <div key={index} className="col-span-4 grid grid-cols-4 gap-6">
+                  <div  className="col-span-4 grid grid-cols-4 gap-6  border-t-2 border-t-[#D4D4D4] pt-[20px]">
+                    <div>
+                      <h2 className="text-md font-medium text-gray-700 mb-1">
+                        Superior {index + 1}
+                      </h2>
+
+                    </div>
+                    <div></div>
+                    <div></div>
+                    <div className="text-end">
+                      {supervisions.length > 1 && (
+                          <button type="button" onClick={() => deleteSupervision(index)} className="text-red-500 cursor-pointer" title="Romove this supervision"><FontAwesomeIcon icon={faXmark} /></button>
+                      )}
+                    </div>
                   </div>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-md"
-                    value={formData.fatherName}
-                    onChange={(e) =>
-                      handleInputChange("fatherName", e.target.value)
-                    }
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Employment Type <span className="text-red-500">*</span>
+                
+                  <div className="col-span-4 grid grid-cols-4 gap-6 ">
+                    <div>
+                      <div className="mb-1 text-sm font-medium">
+                        Start Date <span className="text-red-500">*</span>
+                      </div>
+                      <DatePicker
+                          value={sup.startDate}
+                          onChange={(value) => handleInputChange("startDate", value)}
+                          placeholder="DD/MM/YYYY"
+                        />
+                    </div>
+                    <div>
+                      <div className="mb-1 text-sm font-medium">
+                        End Date <span className="text-red-500">*</span>
+                      </div>
+                      <DatePicker
+                          value={formData.joinDate}
+                          onChange={(value) => handleInputChange("endDate", value)}
+                          placeholder="DD/MM/YYYY"
+                        />
+                    </div>
+                    <div>
+                      <div className="mb-1 text-sm font-medium">
+                        Head of Department <span className="text-red-500">*</span>
+                      </div>
+                      <input
+                        type="text"
+                        className="w-full px-3 py-2 border rounded-md"
+                        value={formData.headofdepartment}
+                        onChange={(e) =>
+                          handleInputChange("Head of Department", e.target.value)
+                        }
+                      />
+                    </div>
+                    <div>
+                      <div className="mb-1 text-sm font-medium">
+                        Reporting Manager <span className="text-red-500">*</span>
+                      </div>
+                      <input
+                        type="text"
+                        className="w-full px-3 py-2 border rounded-md"
+                        value={formData.reportingmanager}
+                        onChange={(e) =>
+                          handleInputChange("Reporting Manager", e.target.value)
+                        }
+                      />
+                    </div>
                   </div>
-                  <CustomSelect
-                    options={employmentTypeOptions}
-                    placeholder="Select"
-                    value={formData.employmentType}
-                    onChange={(value) => handleInputChange("employmentType", value)}
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Unit <span className="text-red-500">*</span>
+
+                
+                  <div className="col-span-4 grid grid-cols-4 gap-6">
+                    <div>
+                      <div className="mb-1 text-sm font-medium">
+                        Authorization Date <span className="text-red-500">*</span>
+                      </div>
+                      <DatePicker
+                        value={formData.authorizationdate}
+                        onChange={(value) => handleInputChange("authorizationdate", value)}
+                        placeholder="--/--/----"
+                      />
+                    </div>
                   </div>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-md"
-                    value={formData.unit}
-                    onChange={(e) => handleInputChange("unit", e.target.value)}
-                  />
                 </div>
+
+              
+              ))}
+
+              <div className="col-span-4 flex space-x-2 mt-0">
+                <button type="button" className="mt-4 px-4 py-2 bg-[#0E99FF] text-white rounded-md hover:bg-[#0e7eff] cursor-pointer" onClick={addSupervision} > + Add Supervision </button>
+                <button type="button" className="mt-4 px-4 py-2 bg-white border border-[#888888] rounded-[4px] cursor-pointer hover:bg-[#888888]" >Clear </button>
               </div>
 
-              {/* Unit, Division, Department */}
+              {/* table */}
+                <div className="col-span-4 grid gap-6 ">
+                  <div className="col-span-4 grid gap-6 border-b-2 border-b-[#D4D4D4] pb-[25px]">
+                    <div className="overflow-x-auto mt-2 bg-white shadow rounded-md">
+                      <table className="w-full text-sm text-left text-gray-700 ">
+                        <thead className="bg-[#C9E8FE] text-[#323232] uppercase text-xs w-full">
+                          <tr>
+                            <th className="py-[13px] pl-[20px]">Sr. No.</th>
+                            <th className="py-[13px] pl-[20px]">Start Date</th>
+                            <th className="py-[13px] pl-[20px]">End Date</th>
+                            <th className="py-[13px] pl-[20px]">Head of Department</th>
+                            <th className="py-[13px] pl-[20px]">Reporting Manager</th>
+                            <th className="py-[13px] pl-[20px]">Edit</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {supervisionList.map((row, index) => (
+                          <tr key={index}>
+                            <td className="py-[13px] pl-[20px]">{index + 1}</td>
+                            <td className="py-[13px] pl-[20px]">{row.startDate}</td>
+                            <td className="py-[13px] pl-[20px]">{row.endDate}</td>
+                            <td className="py-[13px] pl-[20px]">{row.headofdepartment}</td>
+                            <td className="py-[13px] pl-[20px]">{row.reportingmanager}</td>
+                            <td className="py-[13px] pl-[20px]">
+                            <img
+                              src="/images/editicon.svg"
+                              alt="editicon"
+                              className="cursor-pointer"
+                              onClick={() => {
+                              setEditData(row);
+                              setEditIndex(index);
+                              setIsEditModalOpen(true);
+                              }}
+                            />
+                            </td>
+                          </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  {/* popup modal*/}
+                    {isEditModalOpen && (
+
+                      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000050] bg-opacity-50">
+                        <div className="bg-white p-6 rounded-md shadow-md w-full max-w-md">
+                          <h2 className="text-lg font-semibold mb-4">Edit Privouse Employee Details</h2>
+                            <div className="mb-4">
+                              <input type="date" value={editData?.startDate || ''} onChange={(e) => setEditData({
+                                ...editData, startDate: e.target.value
+                              })} className="w-full border p-2 rounded" />
+                            </div>
+
+                            <div className="mb-4">
+                              <label className="block text-sm font-medium">End Date</label>
+                              <input type="date" value={editData?.endDate || ''} onChange={(e) => setEditData({ ...editData, endDate: e.target.value})} className="w-full border p-2 rounded"/>
+                            </div>
+
+                            <div className="mb-4">
+                              <label className="block text-sm font-medium">Head of Department</label>
+                              <input type="text" value={editData?.headofdepartment || ''} onChange={(e) => setEditData({ ...editData, headofdepartment: e.target.value})} className="w-full border p-2 rounded" />
+                            </div>
+
+                            <div className="mb-4">
+                              <label className="block text-sm font-medium">Reporting Manager</label>
+                              <input type="text" value={editData?.reportingmanager || ''} onChange={(e) => setEditData({ ...editData, reportingmanager: e.target.value})} className="w-full border p-2 rounded"/>
+                            </div>            
+
+                            <div className="flex justify-end gap-2">
+                              <button className="px-4 py-2 border border-[#888888]" onClick={() => setIsEditModalOpen(false)}>Cancel</button>
+                              <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={handleSave}> Save </button>
+                            </div>
+                        </div>
+                      </div>
+                    )} 
+                </div>
+
+              {/* previous employment*/}
+              <div className="col-span-4 grid grid-cols-4  gap-6">
+                  <div>
+                    <h2 className="text-md font-medium text-gray-700 mb-1">Previous Employment</h2>
+                  </div>
+                  <div>
+
+                  </div>
+                  <div>
+
+                  </div>
+                  <div>
+
+                  </div>
+              </div>
               <div className="col-span-4 grid grid-cols-4 gap-6">
                 <div>
+                   <div className="mb-1 text-sm font-medium">
+                      From Date <span className="text-red-500">*</span>
+                    </div>
+                    <DatePicker
+                      value={formData.fromDate}
+                      onChange={(value) => handleInputChange("fromdate", value)}
+                      placeholder="DD/MM/YYYY"
+                    />
+                  </div>
+                <div>
                   <div className="mb-1 text-sm font-medium">
-                    Division <span className="text-red-500">*</span>
+                      To Date <span className="text-red-500">*</span>
+                    </div>
+                    <DatePicker
+                      value={formData.fromDate}
+                      onChange={(value) => handleInputChange("fromdate", value)}
+                      placeholder="DD/MM/YYYY"
+                    />
+                </div>
+                <div>
+                  <div className="mb-1 text-sm font-medium">
+                    Company Name <span className="text-red-500">*</span>
                   </div>
                   <input
                     type="text"
                     className="w-full px-3 py-2 border rounded-md"
-                    value={formData.division}
-                    onChange={(e) => handleInputChange("division", e.target.value)}
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Department <span className="text-red-500">*</span>
-                  </div>
-                  <CustomSelect
-                    options={["HR", "Finance", "Operations", "IT", "Section IX"]}
-                    placeholder="Select"
-                    value={formData.department}
-                    onChange={(value) => handleInputChange("department", value)}
+                    placeholder="Enter Company Name"
+                    value={formData.companyname}
+                    onChange={(e) =>
+                      handleInputChange("Company Name", e.target.value)
+                    }
                   />
                 </div>
                 <div>
@@ -1176,165 +1564,82 @@ const EmployeeInformationForm = () => {
                   <input
                     type="text"
                     className="w-full px-3 py-2 border rounded-md"
+                    placeholder="Enter Designation"
                     value={formData.designation}
                     onChange={(e) =>
-                      handleInputChange("designation", e.target.value)
+                      handleInputChange("Designation", e.target.value)
                     }
                   />
                 </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Work Location <span className="text-red-500">*</span>
-                  </div>
-                  <CustomSelect
-                    options={["Head Office", "Branch Office", "Remote"]}
-                    placeholder="Select"
-                    value={formData.workLocation}
-                    onChange={(value) => handleInputChange("workLocation", value)}
-                  />
-                </div>
               </div>
 
-              {/* Work Location, DOB, Gender */}
-              <div className="col-span-4 grid grid-cols-4 gap-6">
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Date of Birth <span className="text-red-500">*</span>
+              {/* table */}
+              <div className="col-span-4 grid gap-6 ">
+                <div className="col-span-4 grid gap-6">
+                  <div className="overflow-x-auto mt-2 bg-white shadow rounded-md">
+                    <table className="w-full text-sm text-left text-gray-700 ">
+                      <thead className="bg-[#C9E8FE] text-[#323232] uppercase text-xs w-full">
+                        <tr>
+                          <th className="py-[13px] pl-[20px]">Sr. No.</th>
+                          <th className="py-[13px] pl-[20px]">Start Date</th>
+                          <th className="py-[13px] pl-[20px]">End Date</th>
+                          <th className="py-[13px] pl-[20px]">Company Name</th>
+                          <th className="py-[13px] pl-[20px]">Designation</th>
+                          <th className="py-[13px] pl-[20px]">Edit</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {previousemployee.map((row, index) => (
+                        <tr key={index}>
+                          <td className="py-[13px] pl-[20px]">{index + 1}</td>
+                          <td className="py-[13px] pl-[20px]">{row.startDate}</td>
+                          <td className="py-[13px] pl-[20px]">{row.endDate}</td>
+                          <td className="py-[13px] pl-[20px]">{row.companyname}</td>
+                          <td className="py-[13px] pl-[20px]">{row.designation}</td>
+                          <td className="py-[13px] pl-[20px]"><img src="/images/editicon.svg" alt="editicon" className="cursor-pointer"  onClick={() => {
+                              setPreviousemployeeEditData(row);
+                              setPreviousemployeeEditIndex(index);
+                              setIsPreviousemployeeEditModalOpen(true);}} /></td>
+                        </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
-                  <DatePicker
-                    value={formData.dateOfBirth}
-                    onChange={(value) => handleInputChange("dateOfBirth", value)}
-                    placeholder="--/--/----"
-                  />
                 </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Gender <span className="text-red-500">*</span>
-                  </div>
-                  <CustomSelect
-                    options={genderOptions}
-                    placeholder="Select"
-                    value={formData.gender}
-                    onChange={(value) => handleInputChange("gender", value)}
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Religion <span className="text-red-500">*</span>
-                  </div>
-                  <CustomSelect
-                    options={religionOptions}
-                    placeholder="Select"
-                    value={formData.religion}
-                    onChange={(value) => handleInputChange("religion", value)}
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Nationality <span className="text-red-500">*</span>
-                  </div>
-                  <CustomSelect
-                    options={nationalityOptions}
-                    placeholder="Select"
-                    value={formData.nationality}
-                    onChange={(value) => handleInputChange("nationality", value)}
-                  />
-                </div>
-              </div>
+                {/* popup modal*/}
+                  {isPreviousemployeeEditModalOpen && (
 
-              {/* Nationality, Service Agreement, Aadhaar */}
-              <div className="col-span-4 grid grid-cols-4 gap-6">
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Service Agreement <span className="text-red-500">*</span>
-                  </div>
-                  <CustomSelect
-                    options={serviceAgreementOptions}
-                    placeholder="Select"
-                    value={formData.serviceAgreement}
-                    onChange={(value) =>
-                      handleInputChange("serviceAgreement", value)
-                    }
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Aadhaar No. <span className="text-red-500">*</span>
-                  </div>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-md"
-                    placeholder="Enter aadhaar no."
-                    value={formData.aadhaarNo}
-                    onChange={(e) => handleInputChange("aadhaarNo", e.target.value)}
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    PAN No. <span className="text-red-500">*</span>
-                  </div>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-md"
-                    placeholder="Enter PAN no."
-                    value={formData.panNo}
-                    onChange={(e) => handleInputChange("panNo", e.target.value)}
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">ESIC No.</div>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-md"
-                    placeholder="Enter ESIC no."
-                    value={formData.esicNo}
-                    onChange={(e) => handleInputChange("esicNo", e.target.value)}
-                  />
-                </div>
-              </div>
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000050] bg-opacity-50">
+                      <div className="bg-white p-6 rounded-md shadow-md w-full max-w-md">
+                         <h2 className="text-lg font-semibold mb-4">Edit Supervision</h2>
+                          <div className="mb-4">
+                            <input type="date" value={previousemployeeeditData?.startDate || ''} onChange={(e) => setPreviousemployeeEditData({
+                              ...previousemployeeeditData, startDate: e.target.value
+                            })} className="w-full border p-2 rounded" />
+                          </div>
 
-              {/* ESIC, UAN, PF */}
-              <div className="col-span-4 grid grid-cols-4 gap-6">
-                <div>
-                  <div className="mb-1 text-sm font-medium">UAN No.</div>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-md"
-                    placeholder="Enter UAN no."
-                    value={formData.uanNo}
-                    onChange={(e) => handleInputChange("uanNo", e.target.value)}
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">PF No.</div>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-md"
-                    placeholder="Enter PF no."
-                    value={formData.pfNo}
-                    onChange={(e) => handleInputChange("pfNo", e.target.value)}
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">Marital Status</div>
-                  <CustomSelect
-                    options={maritalStatusOptions}
-                    placeholder="Select"
-                    value={formData.maritalStatus}
-                    onChange={(value) => handleInputChange("maritalStatus", value)}
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 text-sm font-medium">
-                    Blood Group <span className="text-red-500">*</span>
-                  </div>
-                  <CustomSelect
-                    options={bloodGroupOptions}
-                    placeholder="Select"
-                    value={formData.bloodGroup}
-                    onChange={(value) => handleInputChange("bloodGroup", value)}
-                  />
-                </div>
+                          <div className="mb-4">
+                            <label className="block text-sm font-medium">End Date</label>
+                            <input type="date" value={previousemployeeeditData?.endDate || ''} onChange={(e) => setPreviousemployeeEditData({ ...previousemployeeeditData, endDate: e.target.value})} className="w-full border p-2 rounded"/>
+                          </div>
+
+                          <div className="mb-4">
+                            <label className="block text-sm font-medium">Company Name</label>
+                            <input type="text" value={previousemployeeeditData?.companyname || ''} onChange={(e) => setPreviousemployeeEditData({ ...previousemployeeeditData, companyname: e.target.value})} className="w-full border p-2 rounded" />
+                          </div>
+
+                          <div className="mb-4">
+                            <label className="block text-sm font-medium">Designation</label>
+                            <input type="text" value={previousemployeeeditData?.designation || ''} onChange={(e) => setPreviousemployeeEditData({ ...previousemployeeeditData, designation: e.target.value})} className="w-full border p-2 rounded"/>
+                          </div>            
+
+                          <div className="flex justify-end gap-2">
+                            <button className="px-4 py-2 border border-[#888888]" onClick={() => setIsPreviousemployeeEditModalOpen(false)}>Cancel</button>
+                            <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={handlePrevEmpSave}> Save </button>
+                          </div>
+                      </div>
+                    </div>
+                  )}
               </div>
 
               {/* Buttons */}
@@ -1353,7 +1658,8 @@ const EmployeeInformationForm = () => {
                 </button>
               </div>
             </div>
-          </div>
+            </div>
+          // </div>
         )}
         {activeTab === "Family" && (
           <div>
@@ -1362,96 +1668,222 @@ const EmployeeInformationForm = () => {
             {activeTab}
             </h2>
             <div className="grid grid-cols-4 gap-6">
-              {/* Profile Photo */}
-              <div className="col-span-1">
-                <div className="mb-1 text-sm font-medium">Profile Photo</div>
-                <FileUpload onChange={handleFileChange} />
-              </div>
-
+            
               {/* First Row */}
-              <div className="col-span-3 grid grid-cols-3 gap-6">
-                <div className="col-span-4 grid grid-cols-3 gap-6">
+              {familymember.map((family, index) => (
+              <div key={index} className="col-span-4 grid grid-cols-4 gap-6">
+                <div className="col-span-4 grid grid-cols-4 gap-6">
+                  <div>
+                    {familymember.length > 1 && (
+                          <h2>{activeTab} Details {index}</h2>
+                      )}
+                  </div>
+                  <div></div>
+                  <div></div>
+                  <div className="text-end">
+                  
+                      {familymember.length > 1 && (
+                          <button type="button" onClick={() => deleteFamilymember(index)} className="text-red-500 cursor-pointer" title="Romove this supervision"><FontAwesomeIcon icon={faXmark} /></button>
+                      )}
+                  </div>
+                </div>
+                <div className="col-span-4 grid grid-cols-4 gap-6">
                   <div className="col-span-1">
                     <div className="mb-1 text-sm font-medium">
-                      Employee Code <span className="text-red-500">*</span>
+                      Name <span className="text-red-500">*</span>
                     </div>
                     <input
                       type="text"
                       className="w-full px-3 py-2 border rounded-md"
-                      value={formData.employeeCode}
+                      value={family.name}
+                      placeholder="Enter name"
                       onChange={(e) =>
-                        handleInputChange("employeeCode", e.target.value)
+                        handleInputChange("name", e.target.value)
                       }
                     />
                   </div>
                   <div>
                     <div className="mb-1 text-sm font-medium">
-                      Join Date <span className="text-red-500">*</span>
+                      Relation <span className="text-red-500">*</span>
                     </div>
-                    <DatePicker
+                    <CustomSelect
+                      options={relation}
+                      placeholder="Select"
+                      value={family.relation}
+                      onChange={(value) => handleInputChange("relation", value)} 
+                    />
+                  </div>
+                  <div>
+                    <div className="mb-1 text-sm font-medium">
+                      Gender <span className="text-red-500">*</span>
+                    </div>
+                    <CustomSelect
+                      options={gender}
+                      placeholder="Select"
+                      value={formData.gender}
+                      onChange={(value) => handleInputChange("Gender", value)} 
+                    />
+                  </div>
+                  <div>
+                     <div className="mb-1 text-sm font-medium">
+                      Date of Birth <span className="text-red-500">*</span>
+                    </div>
+                     <DatePicker
                       value={formData.joinDate}
                       onChange={(value) => handleInputChange("joinDate", value)}
                       placeholder="DD/MM/YYYY"
                     />
                   </div>
-                  <div>
-                    <div className="mb-1 text-sm font-medium">
-                      Salutation <span className="text-red-500">*</span>
-                    </div>
-                    <CustomSelect
-                      options={salutationOptions}
-                      placeholder="Select"
-                      value={formData.salutation}
-                      onChange={(value) => handleInputChange("salutation", value)} 
-                    />
-                  </div>
                 </div>
                 {/* Name Fields */}
-                <div className="col-span-4 grid grid-cols-3 gap-6">
+                <div className="col-span-4 grid grid-cols-4 gap-6">
                   <div>
                     <div className="mb-1 text-sm font-medium">
-                      First Name <span className="text-red-500">*</span>
+                      Marital Status<span className="text-red-500">*</span>
+                    </div>
+                   <CustomSelect
+                      options={maritalstatus}
+                      placeholder="Select"
+                      value={formData.maritalstatus}
+                      onChange={(value) => handleInputChange("Marital Status", value)} 
+                    />
+                  </div>
+                  <div>
+                    <div className="mb-1 text-sm font-medium">
+                      Contact No. <span className="text-red-500">*</span>
                     </div>
                     <input
                       type="text"
                       className="w-full px-3 py-2 border rounded-md"
-                      placeholder="Enter first name"
-                      value={formData.firstName}
+                      placeholder="Enter contact no."
+                      value={formData.contactno}
                       onChange={(e) =>
-                        handleInputChange("firstName", e.target.value)
+                        handleInputChange("Contact No", e.target.value)
                       }
                     />
                   </div>
                   <div>
                     <div className="mb-1 text-sm font-medium">
-                      Middle Name <span className="text-red-500">*</span>
+                      Can be Contacted in Emergency? <span className="text-red-500">*</span>
                     </div>
+                    {contactedemergency.map((option, index) => (
+                      <label key={index} className="inline-flex items-center mr-4">
                     <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded-md"
-                      placeholder="Enter middle name"
-                      value={formData.middleName}
+                      type="radio"
+                      className=" mr-[5px]"
+                      // placeholder="Enter last name"
+                      value={option}
+                      checked={selectedRadioButton === option}
                       onChange={(e) =>
-                        handleInputChange("middleName", e.target.value)
+                        setSelectedRadioButton( e.target.value)
                       }
                     />
-                  </div>
-                  <div>
-                    <div className="mb-1 text-sm font-medium">
-                      Last Name <span className="text-red-500">*</span>
-                    </div>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded-md"
-                      placeholder="Enter last name"
-                      value={formData.lastName}
-                      onChange={(e) =>
-                        handleInputChange("lastName", e.target.value)
-                      }
-                    />
+                    <div className="text-sm font-medium">{option}</div>
+                    </label>
+                    ))}
                   </div>
                 </div>
+                
               </div>
+              ))}
+
+              <div className="col-span-4 flex space-x-2 mt-0">
+                <button type="button" className="mt-4 px-4 py-2 bg-[#0E99FF] text-white rounded-md hover:bg-[#0e7eff] cursor-pointer" onClick={addFamilymember} > + Add Supervision </button>
+                <button type="button" className="mt-4 px-4 py-2 bg-white border border-[#888888] rounded-[4px] cursor-pointer hover:bg-[#888888]" >Clear </button>
+              </div>
+
+              {/* Table*/}
+             <div className="col-span-4 grid gap-6 ">
+                  <div className="col-span-4 grid gap-6 border-b-2 border-b-[#D4D4D4] pb-[25px]">
+                    <div className="overflow-x-auto mt-2 bg-white shadow rounded-md">
+                      <table className="w-full text-sm text-left text-gray-700 ">
+                        <thead className="bg-[#C9E8FE] text-[#323232] uppercase text-xs w-full">
+                          <tr>
+                            <th className="py-[13px] pl-[20px]">Sr. No.</th>
+                            <th className="py-[13px] pl-[20px]">Name</th>
+                            <th className="py-[13px] pl-[20px]">Relation</th>
+                            <th className="py-[13px] pl-[20px]">Gender</th>
+                            <th className="py-[13px] pl-[20px]">DOB</th>
+                            <th className="py-[13px] pl-[20px]">Marital Status</th>
+                            <th className="py-[13px] pl-[20px]">Contact No.</th>
+                            <th className="py-[13px] pl-[20px]">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {familymember.map((row, index) => (
+                          <tr key={index}>
+                            <td className="py-[13px] pl-[20px]">{index + 1}</td>
+                            <td className="py-[13px] pl-[20px]">{row.name}</td>
+                            <td className="py-[13px] pl-[20px]">{row.relation}</td>
+                            <td className="py-[13px] pl-[20px]">{row.gender}</td>
+                            <td className="py-[13px] pl-[20px]">{row.dob}</td>
+                            <td className="py-[13px] pl-[20px]">{row.maritalstatus}</td>
+                            <td className="py-[13px] pl-[20px]">{row.contactno}</td>
+                            <td className="py-[13px] pl-[20px]">
+                            <img
+                              src="/images/editicon.svg"
+                              alt="editicon"
+                              className="cursor-pointer"
+                              onClick={() => {
+                              setFamilyEditData(row);
+                              setFamilyEditIndex(index);
+                              setIsFamilyEditModalOpen(true);
+                              }}
+                            />
+                            </td>
+                          </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  {/* popup modal*/}
+                    {isFamilyEditModalOpen && (
+
+                      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000050] bg-opacity-50">
+                        <div className="bg-white p-6 rounded-md shadow-md w-full max-w-md">
+                          <h2 className="text-lg font-semibold mb-4">Edit Family Details</h2>
+                            <div className="mb-4">
+                              <label className="block text-sm font-medium">Name</label>
+                              <input type="text" value={familyeditData?.name || ''} onChange={(e) => setFamilyEditData({
+                                ...familyeditData, name: e.target.value
+                              })} className="w-full border p-2 rounded" />
+                            </div>
+
+                            <div className="mb-4">
+                              <label className="block text-sm font-medium">Relation</label>
+                              <input type="text" value={familyeditData?.relation || ''} onChange={(e) => setFamilyEditData({ ...familyeditData, relation: e.target.value})} className="w-full border p-2 rounded"/>
+                            </div>
+
+                            <div className="mb-4">
+                              <label className="block text-sm font-medium">Gender</label>
+                              <input type="text" value={familyeditData?.gender || ''} onChange={(e) => setFamilyEditData({ ...familyeditData, gender: e.target.value})} className="w-full border p-2 rounded" />
+                            </div>
+
+                            <div className="mb-4">
+                              <label className="block text-sm font-medium">Date Of Birth</label>
+                              <input type="date" value={familyeditData?.dob || ''} onChange={(e) => setFamilyEditData({ ...familyeditData, dob: e.target.value})} className="w-full border p-2 rounded"/>
+                            </div>  
+
+                            <div className="mb-4">
+                              <label className="block text-sm font-medium">Marital Status</label>
+                              <input type="text" value={familyeditData?.maritalstatus || ''} onChange={(e) => setFamilyEditData({ ...familyeditData, maritalstatus: e.target.value})} className="w-full border p-2 rounded"/>
+                            </div> 
+
+                            <div className="mb-4">
+                              <label className="block text-sm font-medium">Contact No.</label>
+                              <input type="text" value={familyeditData?.contactno || ''} onChange={(e) => setFamilyEditData({ ...familyeditData, contactno: e.target.value})} className="w-full border p-2 rounded"/>
+                            </div>          
+
+                            <div className="flex justify-end gap-2">
+                              <button className="px-4 py-2 border border-[#888888]" onClick={() => setIsFamilyEditModalOpen(false)}>Cancel</button>
+                              <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={handleFamilySave}> Save </button>
+                            </div>
+                        </div>
+                      </div>
+                    )} 
+                </div>
+
               {/* Aadhaar and Father Name */}
               <div className="col-span-4 grid grid-cols-4 gap-6">
                 <div>
