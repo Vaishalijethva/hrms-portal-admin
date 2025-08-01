@@ -207,12 +207,28 @@ const EmployeeInformationForm = () => {
 
 
 
-  const handleInputChange = (field, value) => {
-    setFormData({
-      ...formData,
+  // const handleInputChange = (field, value) => {
+  //   setFormData({
+  //     ...formData,
+  //     [field]: value,
+  //   });
+  // };
+const handleInputChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
       [field]: value,
+    }));
+
+     if (errors[field] && value.trim()) {
+    setErrors(prevErrors => {
+      const newErrors = { ...prevErrors };
+      delete newErrors[field];
+      return newErrors;
     });
+  }
   };
+  
+ 
 
   const handleFileChange = (selectedFile) => {
     // Check file size (5MB limit)
@@ -297,7 +313,6 @@ const EmployeeInformationForm = () => {
 
   const contactedemergency = ["yes", "No"];
   const [selectedRadioButton, setSelectedRadioButton] = useState("");
-
   const genderOptions = ["Male", "Female", "Other"];
   const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Others"];
   const nationalityOptions = ["Indian", "Others"];
@@ -306,8 +321,8 @@ const EmployeeInformationForm = () => {
   const maritalStatusOptions = ["Single", "Married", "Divorced", "Widowed"];
   const bloodGroupOptions = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const salutationOptions = ["Mr.", "Mrs.", "Ms.", "Dr."];
-  const addresstype =["permanent", "work"]
-  const country = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Austrian Empire*", "Azerbaijan", "Baden*", "Bahamas, The", "Bahrain", "Bangladesh", "Barbados", "Bavaria*", "Belarus", "Belgium", "Belize", "Benin (Dahomey)", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Brunswick and Lüneburg*", "Bulgaria", "Burkina Faso (Upper Volta)", "Burma", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Cayman Islands, The", "Central African Republic", "Central American Federation* ", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo Free State, The* ", "Cook Islands", "Costa Rica", "Cote d’Ivoire (Ivory Coast)", "Croatia", "Cuba", "Cyprus", "Czechia", "Czechoslovakia*", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Duchy of Parma, The*", "East Germany (German Democratic Republic)* ", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Federal Government of Germany (1848-49)*", "Fiji", "Finland", "France", "Gabon", "Gambia, The", "Georgia", "Germany", "Ghana", "Grand Duchy of Tuscany, The* ", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Hanover*", "Hanseatic Republics*", "Hawaii*", "Hesse*", "Holy See", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kingdom of Serbia/Yugoslavia*", "Kiribati", "Korea", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Lew Chew (Loochoo)*", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mecklenburg-Schwerin*", "Mecklenburg-Strelitz* ", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Namibia", 
+  const addresstype = ["permanent", "work"];
+  const country = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Austrian Empire*", "Azerbaijan", "Baden*", "Bahamas, The", "Bahrain", "Bangladesh", "Barbados", "Bavaria*", "Belarus", "Belgium", "Belize", "Benin (Dahomey)", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Brunswick and Lüneburg*", "Bulgaria", "Burkina Faso (Upper Volta)", "Burma", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Cayman Islands, The", "Central African Republic", "Central American Federation* ", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo Free State, The* ", "Cook Islands", "Costa Rica", "Cote d’Ivoire (Ivory Coast)", "Croatia", "Cuba", "Cyprus", "Czechia", "Czechoslovakia*", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Duchy of Parma, The*", "East Germany (German Democratic Republic)* ", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Federal Government of Germany (1848-49)*", "Fiji", "Finland", "France", "Gabon", "Gambia, The", "Georgia", "Germany", "Ghana", "Grand Duchy of Tuscany, The* ", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Hanover*", "Hanseatic Republics*", "Hawaii*", "Hesse*", "Holy See", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kingdom of Serbia/Yugoslavia*", "Kiribati", "Korea", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Lew Chew (Loochoo)*", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mecklenburg-Schwerin*", "Mecklenburg-Strelitz* ", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Namibia",
   "Nassau*", "Nauru", "Nepal", "Netherlands, The", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "North German Confederation*", "North German Union*", "North Macedonia", "Norway", "Oldenburg*", "Oman", "Orange Free State*", "Pakistan", "Palau", "Panama", "Papal States* ", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Piedmont-Sardinia*", "Poland", "Portugal", "Qatar", "Republic of Genoa*", "Republic of Korea (South Korea)", "Republic of the Congo", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Schaumburg-Lippe*", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands, The", "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Tajikistan", "Tanzania", "Texas*", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Two Sicilies*", "Uganda", "Ukraine", "Union of Soviet Socialist Republics*", "United Arab Emirates, The", "United Kingdom, The", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Württemberg*", "Yemen", "Zambia", "Zimbabwe"]
   const state = ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Maharashtra", "Madhya Pradesh", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Tripura", "Telangana", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman & Nicobar (UT)", "Chandigarh (UT)", "Dadra & Nagar Haveli and Daman & Diu (UT)", "Delhi [National Capital Territory (NCT)]", "Jammu & Kashmir (UT)", "Ladakh (UT)", "Lakshadweep (UT)", "Puducherry (UT)"]
   const city = [ "Port Blair","Adoni", "Amaravati", "Anantapur", "Chandragiri", "Chittoor", "Dowlaiswaram", "Eluru", "Guntur", "Kadapa","Kakinada", "Kurnool", "Machilipatnam", "Nagarjunakoṇḍa", "Rajahmundry", "Srikakulam", "Tirupati", "Vijayawada", "Visakhapatnam", "Vizianagaram", "Yemmiganur", "Itanagar", "Dhuburi", "Dibrugarh", "Dispur", "Guwahati", "Jorhat", "Nagaon", "Sivasagar", "Silchar", "Tezpur", "Tinsukia", "Ara", "Barauni", "Begusarai", "Bettiah", "Bhagalpur", "Bihar Sharif", "Bodh Gaya", "Buxar", "Chapra", "Darbhanga", "Dehri", "Dinapur Nizamat", "Gaya", "Hajipur", "Jamalpur", "Katihar", "Madhubani", "Motihari", "Munger", "Muzaffarpur", "Patna", "Purnia", "Pusa", "Saharsa", "Samastipur"]
@@ -318,7 +333,68 @@ const EmployeeInformationForm = () => {
   const maritalstatus = ["Unmarried", "Married", "Diocese"]
 
   const [showModel, setShowModal] = useState(false);
+  const [openModel, setOpenModel] = useState(false);
+ const [errors, setErrors] = useState({});
 
+    const validateForm = () => {
+      const newErrors = {};
+
+      if(!formData.employeeCode.trim()) {newErrors.employeeCode = "Employee Code is required";}
+      if(!formData.joinDate.trim()) { newErrors.joinDate = "Join Date is required"; }
+      if(!formData.salutation.trim()) { newErrors.salutation = "Salutation is required"; }
+      if(!formData.firstName.trim()) { newErrors.firstName = "First Name is required"; }
+      if(!formData.middleName.trim()) { newErrors.middleName = "Middle Name is required"; }
+      if(!formData.lastName.trim()) { newErrors.lastName = "Last Name is required"; }
+      if(!formData.nameAsPerAadhaar.trim()) { newErrors.nameAsPerAadhaar = "Name as per Aadhaar is required"; }
+      if(!formData.fatherName.trim()) { newErrors.fatherName = "Father's Name is required"; }
+      if(!formData.employmentType.trim()) { newErrors.employmentType = "Employment Type is required"; }
+      if(!formData.unit.trim()) { newErrors.unit = "Unit is required"; }
+      if(!formData.division.trim()) { newErrors.division = "Division is required"; }
+      if(!formData.department.trim()) { newErrors.department = "Department is required"; }
+      if(!formData.designation.trim()) { newErrors.designation = "Designation is required"; }
+      if(!formData.workLocation.trim()) { newErrors.workLocation = "Work Location is required"; }
+      if(!formData.dateOfBirth.trim()) { newErrors.dateOfBirth = "Date of Birth is required"; }
+      if(!formData.gender.trim()) { newErrors.gender = "Gender is required"; }
+      if(!formData.religion.trim()) { newErrors.religion = "Religion is required"; }
+      if(!formData.nationality.trim()) { newErrors.nationality = "Nationality is required"; }
+      if(!formData.serviceAgreement.trim()) { newErrors.serviceAgreement = "Service Agreement is required"; }
+      if(!formData.aadhaarNo.trim()) { newErrors.aadhaarNo = "Aadhaar Number is required"; }
+      if(!formData.panNo.trim()) { newErrors.panNo = "PAN Number is required"; }
+      if(!formData.esicNo.trim()) { newErrors.esicNo = "ESIC Number is required"; }
+      if(!formData.uanNo.trim()) { newErrors.uanNo = "UAN Number is required"; }
+      if(!formData.pfNo.trim()) { newErrors.pfNo = "PF Number is required"; }
+      if(!formData.maritalStatus.trim()) { newErrors.maritalStatus = "Marital Status is required"; }
+      if(!formData.bloodGroup.trim()) { newErrors.bloodGroup = "Blood Group is required"; }
+
+      if(!formData.corporatemobileno.trim()) { newErrors.corporatemobileno = "Corporate Mobile Number is required"; }
+      if(!formData.corporateemailaddress.trim()) { newErrors.corporateemailaddress = "Corporate Email Address is required"; }
+
+       setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+    }
+
+
+    
+  //   const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const validationErrors = validateForm();
+  //   if (Object.keys(validationErrors).length > 0) {
+  //     setErrors(validationErrors);
+  //   } else {
+  //     setErrors({});
+  //     setShowModal(true);
+  //   }
+  // };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      setShowModal(true);
+    }
+  };
+
+    
   /* edit details table */
   useEffect(() =>  {
    const supervisiondata= [
@@ -332,71 +408,57 @@ const EmployeeInformationForm = () => {
     setSupervisionList(supervisiondata);
    }, []);
 
-   useEffect(() => {
-    const previousemployeedata = [
-      {
-        startDate: "09/10/2024",
-        endDate: "09/10/2025",
-        companyname: "Lorem ipsum dolor",
-        designation: "Lorem Ipsum", 
-      }
-    ];
-    setPreviousemployee(previousemployeedata);
-   }, []);
+  useEffect(() => {
+  const previousemployeedata = [
+    {
+      startDate: "09/10/2024",
+      endDate: "09/10/2025",
+      companyname: "Lorem ipsum dolor",
+      designation: "Lorem Ipsum", 
+    }
+  ];
+  setPreviousemployee(previousemployeedata);
+  }, []);
 
-   useEffect(() => {
-    const familydata = [
-      {
-        name: "Michael McCoy",
-        relation: "Father",
-        gender: "Male",
-        dob: "23/04/1971",
-        maritalstatus: "Married",
-        contactno: "+91 00000 00000"
-      },
-      {
-        name: "Rose McCoy",
-        relation: "Mother",
-        gender: "Female",
-        dob: "17/01/1974",
-        maritalstatus: "Married",
-        contactno: "+91 00000 00000"
-      }
-    ];
-    setFamilymember(familydata);
-   })
+  useEffect(() => {
+  const familydata = [
+    {
+      name: "Michael McCoy",
+      relation: "Father",
+      gender: "Male",
+      dob: "23/04/1971",
+      maritalstatus: "Married",
+      contactno: "+91 00000 00000"
+    },
+    {
+      name: "Rose McCoy",
+      relation: "Mother",
+      gender: "Female",
+      dob: "17/01/1974",
+      maritalstatus: "Married",
+      contactno: "+91 00000 00000"
+    }
+  ];
+  setFamilymember(familydata);
+  }, [])
+
+  // const goToPreviousTab = () => {
+  //   if(activeTab > 0) {
+  //     setActiveTab(activeTab - 1);
+  //   }
+  // }
   const [supervisionList, setSupervisionList] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPreviousemployeeEditModalOpen, setIsPreviousemployeeEditModalOpen] = useState(false);
   const [isFamilyEditModalOpen, setIsFamilyEditModalOpen] = useState(false);
   // const [editData, setEditData] = useState(null);
   // const [previousemployee, setPreviousEmployee] = useState([]);
-  const [editData, setEditData] = useState({
-    startDate: '',
-    endDate: '',
-    headofdepartment: '',
-    reportingmanager: '',
-  });
+  const [editData, setEditData] = useState({ startDate: '', endDate: '', headofdepartment: '', reportingmanager: '', });
   const [editIndex, setEditIndex] = useState(null);
-
-  const [previousemployeeeditData, setPreviousemployeeEditData] = useState({
-    startDate: '',
-    endDate: '',
-    companyname: '',
-    designation: '',
-  });
+  const [previousemployeeeditData, setPreviousemployeeEditData] = useState({ startDate: '', endDate: '', companyname: '', designation: '', });
   const [previousemployeeeditIndex, setPreviousemployeeEditIndex] = useState(null)
-
-  const [familyeditData, setFamilyEditData] = useState({
-    name: '',
-    relation: '',
-    gender: '', 
-    dob: '',
-    maritalstatus: '',
-    contactno: ''
-  });
+  const [familyeditData, setFamilyEditData] = useState({ name: '', relation: '', gender: '', dob: '', maritalstatus: '', contactno: ''});
   const [familyeditIndex, setFamilyEditIndex] = useState(null)
-
   const handleSave = () => {
   const updated = [...supervisionList];
   updated[editIndex] = editData;
@@ -419,7 +481,9 @@ const EmployeeInformationForm = () => {
     setFamilymember(updatefamilymember);
     setIsFamilyEditModalOpen(false);
   }
- 
+
+  
+
 
   return (
     <div className="bg-[#F8FBFE] p-6 rounded-lg shadow-sm overflow-y-auto">
@@ -481,7 +545,8 @@ const EmployeeInformationForm = () => {
       {/* Form Content */}
       <div>
         {activeTab === "Primary Details" && (
-          <div>
+          // <div>
+          <form onSubmit={handleSubmit}>
             <h2 className="text-md font-medium text-gray-700 mb-4">
               Basic Information
             </h2>
@@ -507,8 +572,9 @@ const EmployeeInformationForm = () => {
                       onChange={(e) =>
                         handleInputChange("employeeCode", e.target.value)
                       }
-                      required
+                     
                     />
+                     {errors.employeeCode && (<p className="text-red-500 text-sm">{errors.employeeCode}</p>)}
                   </div>
                   <div>
                     <div className="mb-1 text-sm font-medium">
@@ -519,6 +585,7 @@ const EmployeeInformationForm = () => {
                       onChange={(value) => handleInputChange("joinDate", value)}
                       placeholder="DD/MM/YYYY"
                     />
+                    {errors.joinDate && (<p className="text-red-500 text-sm">{errors.joinDate}</p>)}
                   </div>
                   <div>
                     <div className="mb-1 text-sm font-medium">
@@ -530,6 +597,7 @@ const EmployeeInformationForm = () => {
                       value={formData.salutation}
                       onChange={(value) => handleInputChange("salutation", value)} 
                     />
+                    {errors.salutation && (<p className="text-red-500 text-sm">{errors.salutation}</p>)}
                   </div>
                 </div>
                 {/* Name Fields */}
@@ -547,6 +615,7 @@ const EmployeeInformationForm = () => {
                         handleInputChange("firstName", e.target.value)
                       }
                     />
+                    {errors.firstName && (<p className="text-red-500 text-sm">{errors.firstName}</p>)}
                   </div>
                   <div>
                     <div className="mb-1 text-sm font-medium">
@@ -561,6 +630,7 @@ const EmployeeInformationForm = () => {
                         handleInputChange("middleName", e.target.value)
                       }
                     />
+                    {errors.middleName && (<p className="text-red-500 text-sm">{errors.middleName}</p>)}
                   </div>
                   <div>
                     <div className="mb-1 text-sm font-medium">
@@ -575,6 +645,7 @@ const EmployeeInformationForm = () => {
                         handleInputChange("lastName", e.target.value)
                       }
                     />
+                    {errors.lastName && (<p className="text-red-500 text-sm">{errors.lastName}</p>)}
                   </div>
                 </div>
               </div>
@@ -592,6 +663,7 @@ const EmployeeInformationForm = () => {
                       handleInputChange("nameAsPerAadhaar", e.target.value)
                     }
                   />
+                  {errors.nameAsPerAadhaar && (<p className="text-red-500 text-sm">{errors.nameAsPerAadhaar}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -605,6 +677,7 @@ const EmployeeInformationForm = () => {
                       handleInputChange("fatherName", e.target.value)
                     }
                   />
+                  {errors.fatherName && (<p className="text-red-500 text-sm">{errors.fatherName}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -616,6 +689,7 @@ const EmployeeInformationForm = () => {
                     value={formData.employmentType}
                     onChange={(value) => handleInputChange("employmentType", value)}
                   />
+                  {errors.employmentType && (<p className="text-red-500 text-sm">{errors.employmentType}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -627,6 +701,7 @@ const EmployeeInformationForm = () => {
                     value={formData.unit}
                     onChange={(e) => handleInputChange("unit", e.target.value)}
                   />
+                  {errors.unit && (<p className="text-red-500 text-sm">{errors.unit}</p>)}
                 </div>
               </div>
 
@@ -642,6 +717,7 @@ const EmployeeInformationForm = () => {
                     value={formData.division}
                     onChange={(e) => handleInputChange("division", e.target.value)}
                   />
+                  {errors.division && (<p className="text-red-500 text-sm">{errors.division}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -653,6 +729,7 @@ const EmployeeInformationForm = () => {
                     value={formData.department}
                     onChange={(value) => handleInputChange("department", value)}
                   />
+                  {errors.department && (<p className="text-red-500 text-sm">{errors.department}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -666,6 +743,7 @@ const EmployeeInformationForm = () => {
                       handleInputChange("designation", e.target.value)
                     }
                   />
+                  {errors.designation && (<p className="text-red-500 text-sm">{errors.designation}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -677,6 +755,7 @@ const EmployeeInformationForm = () => {
                     value={formData.workLocation}
                     onChange={(value) => handleInputChange("workLocation", value)}
                   />
+                  {errors.workLocation && (<p className="text-red-500 text-sm">{errors.workLocation}</p>)}
                 </div>
               </div>
 
@@ -691,6 +770,7 @@ const EmployeeInformationForm = () => {
                     onChange={(value) => handleInputChange("dateOfBirth", value)}
                     placeholder="--/--/----"
                   />
+                  {errors.dateOfBirth && (<p className="text-red-500 text-sm">{errors.dateOfBirth}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -702,6 +782,7 @@ const EmployeeInformationForm = () => {
                     value={formData.gender}
                     onChange={(value) => handleInputChange("gender", value)}
                   />
+                  {errors.gender && (<p className="text-red-500 text-sm">{errors.gender}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -713,6 +794,7 @@ const EmployeeInformationForm = () => {
                     value={formData.religion}
                     onChange={(value) => handleInputChange("religion", value)}
                   />
+                  {errors.religion && (<p className="text-red-500 text-sm">{errors.religion}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -724,6 +806,7 @@ const EmployeeInformationForm = () => {
                     value={formData.nationality}
                     onChange={(value) => handleInputChange("nationality", value)}
                   />
+                  {errors.nationality && (<p className="text-red-500 text-sm">{errors.nationality}</p>)}
                 </div>
               </div>
 
@@ -741,6 +824,7 @@ const EmployeeInformationForm = () => {
                       handleInputChange("serviceAgreement", value)
                     }
                   />
+                  {errors.serviceAgreement && (<p className="text-red-500 text-sm">{errors.serviceAgreement}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -753,6 +837,7 @@ const EmployeeInformationForm = () => {
                     value={formData.aadhaarNo}
                     onChange={(e) => handleInputChange("aadhaarNo", e.target.value)}
                   />
+                  {errors.aadhaarNo && (<p className="text-red-500 text-sm">{errors.aadhaarNo}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -765,6 +850,7 @@ const EmployeeInformationForm = () => {
                     value={formData.panNo}
                     onChange={(e) => handleInputChange("panNo", e.target.value)}
                   />
+                  {errors.panNo && (<p className="text-red-500 text-sm">{errors.panNo}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">ESIC No.</div>
@@ -775,6 +861,7 @@ const EmployeeInformationForm = () => {
                     value={formData.esicNo}
                     onChange={(e) => handleInputChange("esicNo", e.target.value)}
                   />
+                  {errors.esicNo && (<p className="text-red-500 text-sm">{errors.esicNo}</p>)}
                 </div>
               </div>
 
@@ -789,6 +876,7 @@ const EmployeeInformationForm = () => {
                     value={formData.uanNo}
                     onChange={(e) => handleInputChange("uanNo", e.target.value)}
                   />
+                  {errors.uanNo && (<p className="text-red-500 text-sm">{errors.uanNo}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">PF No.</div>
@@ -799,6 +887,7 @@ const EmployeeInformationForm = () => {
                     value={formData.pfNo}
                     onChange={(e) => handleInputChange("pfNo", e.target.value)}
                   />
+                  {errors.pfNo && (<p className="text-red-500 text-sm">{errors.pfNo}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">Marital Status</div>
@@ -808,6 +897,7 @@ const EmployeeInformationForm = () => {
                     value={formData.maritalStatus}
                     onChange={(value) => handleInputChange("maritalStatus", value)}
                   />
+                  {errors.maritalStatus && (<p className="text-red-500 text-sm">{errors.maritalStatus}</p>)}
                 </div>
                 <div>
                   <div className="mb-1 text-sm font-medium">
@@ -819,6 +909,7 @@ const EmployeeInformationForm = () => {
                     value={formData.bloodGroup}
                     onChange={(value) => handleInputChange("bloodGroup", value)}
                   />
+                  {errors.bloodGroup && (<p className="text-red-500 text-sm">{errors.bloodGroup}</p>)}
                 </div>
               </div>
 
@@ -826,7 +917,13 @@ const EmployeeInformationForm = () => {
               <div className="col-span-4 flex space-x-2 mt-4">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onClick={() => setShowModal(true)}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer" 
+                  // onClick={() => setShowModal(true)}
+                  // onClick={() => {
+                  //   // if (validateForm()) {
+                  //     setShowModal(true);
+                  //   // }
+                  // }}
                 >
                   Save & Next
                 </button>
@@ -839,13 +936,16 @@ const EmployeeInformationForm = () => {
               </div>
             </div>
             
-          </div>
+          {/* </div> */}
+          </form>
+          
         )}
         {activeTab === "Contact & Bank Details" && (
           <div>
             <h2 className="text-md font-medium text-gray-700 mb-4">
             Contact & Bank Details
             </h2>
+            <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-4 gap-6">
               {/* First Row */}
               <div className="col-span-4 grid grid-cols-4 gap-6">
@@ -862,7 +962,6 @@ const EmployeeInformationForm = () => {
                         handleInputChange("corporatemobileno", e.target.value)
                       }
                       placeholder="+91 0000000000"
-                      required
                     />
                   </div>
                   <div>
@@ -1187,13 +1286,28 @@ const EmployeeInformationForm = () => {
               <div className="col-span-4 flex space-x-2 mt-4">
                 <button
                   type="button"
-                  className="px-4 py-2 border border-[#888888] text-[#888888] rounded-md hover:bg-[#888888] hover:text-[#FFF] transition-all delay-75 ease-in-out cursor-pointer" onClick={() => setShowModal(true)}
+                  className="px-4 py-2 border border-[#888888] text-[#888888] rounded-md hover:bg-[#888888] hover:text-[#FFF] transition-all delay-75 ease-in-out cursor-pointer"
+                  onClick={() => {
+                    // Go to previous tab
+                    const currentIndex = tabs.indexOf(activeTab);
+                    if (currentIndex > 0) {
+                      setActiveTab(tabs[currentIndex - 1]);
+                    }
+                  }}
                 >
-                 Previous Page
+                  Previous Page
                 </button>
                 <button
                   type="button"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onClick={() => setShowModal(true)}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" 
+                  // onClick={() => setShowModal(true)}
+                   onClick={() => {
+                    // Go to next tab
+                    const currentIndex = tabs.indexOf(activeTab);
+                    if (currentIndex > 0) {
+                      setActiveTab(tabs[currentIndex + 1]);
+                    }
+                  }}
                 >
                   Save & Next
                 </button>
@@ -1205,6 +1319,7 @@ const EmployeeInformationForm = () => {
                 </button>
               </div>
             </div>
+            </form>
           </div>
         )}
         {activeTab === "Employment" && (
@@ -1646,7 +1761,26 @@ const EmployeeInformationForm = () => {
               <div className="col-span-4 flex space-x-2 mt-4">
                 <button
                   type="button"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onClick={() => setShowModal(true)}
+                  className="px-4 py-2 border border-[#888888] text-[#888888] rounded-md hover:bg-[#888888] hover:text-[#FFF] transition-all delay-75 ease-in-out cursor-pointer"
+                  onClick={() => {
+                    // Go to previous tab
+                    const currentIndex = tabs.indexOf(activeTab);
+                    if (currentIndex > 0) {
+                      setActiveTab(tabs[currentIndex - 1]);
+                    }
+                  }}
+                >
+                  Previous Page
+                </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onClick={() => {
+                    // Go to next tab
+                    const currentIndex = tabs.indexOf(activeTab);
+                    if (currentIndex < tabs.length - 1) {
+                      setActiveTab(tabs[currentIndex + 1]);
+                    }
+                  }}
                 >
                   Save & Next
                 </button>
@@ -1658,7 +1792,7 @@ const EmployeeInformationForm = () => {
                 </button>
               </div>
             </div>
-            </div>
+          </div>
           // </div>
         )}
         {activeTab === "Family" && (
@@ -1788,8 +1922,8 @@ const EmployeeInformationForm = () => {
               ))}
 
               <div className="col-span-4 flex space-x-2 mt-0">
-                <button type="button" className="mt-4 px-4 py-2 bg-[#0E99FF] text-white rounded-md hover:bg-[#0e7eff] cursor-pointer" onClick={addFamilymember} > + Add Supervision </button>
-                <button type="button" className="mt-4 px-4 py-2 bg-white border border-[#888888] rounded-[4px] cursor-pointer hover:bg-[#888888]" >Clear </button>
+                <button type="button" className="mt-4 px-4 py-2 bg-[#0E99FF] text-white rounded-md hover:bg-[#0e7eff] cursor-pointer" onClick={addFamilymember} > + Add Member </button>
+                <button type="button" className="mt-4 px-4 py-2 bg-white border border-[#888888] rounded-[4px] cursor-pointer hover:bg-[#888888] hover:text-[#FFF]" >Clear </button>
               </div>
 
               {/* Table*/}
@@ -2132,7 +2266,26 @@ const EmployeeInformationForm = () => {
               <div className="col-span-4 flex space-x-2 mt-4">
                 <button
                   type="button"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onClick={() => setShowModal(true)}
+                  className="px-4 py-2 border border-[#888888] text-[#888888] rounded-md hover:bg-[#888888] hover:text-[#FFF] transition-all delay-75 ease-in-out cursor-pointer"
+                  onClick={() => {
+                    // Go to previous tab
+                    const currentIndex = tabs.indexOf(activeTab);
+                    if (currentIndex > 0) {
+                      setActiveTab(tabs[currentIndex - 1]);
+                    }
+                  }}
+                >
+                  Previous Page
+                </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onClick={() => {
+                    // Go to next tab
+                    const currentIndex = tabs.indexOf(activeTab);
+                    if (currentIndex < tabs.length - 1) {
+                      setActiveTab(tabs[currentIndex + 1]);
+                    }
+                  }}
                 >
                   Save & Next
                 </button>
@@ -2153,6 +2306,7 @@ const EmployeeInformationForm = () => {
             {activeTab}
             </h2>
             <div className="grid grid-cols-4 gap-6">
+              
               {/* Profile Photo */}
               <div className="col-span-1">
                 <div className="mb-1 text-sm font-medium">Profile Photo</div>
@@ -2463,6 +2617,7 @@ const EmployeeInformationForm = () => {
                     placeholder="Enter PF no."
                     value={formData.pfNo}
                     onChange={(e) => handleInputChange("pfNo", e.target.value)}
+                    required
                   />
                 </div>
                 <div>
@@ -2491,7 +2646,7 @@ const EmployeeInformationForm = () => {
               <div className="col-span-4 flex space-x-2 mt-4">
                 <button
                   type="button"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onClick={() => setShowModal(true)}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer" onClick={() => setOpenModel(true)}
                 >
                   Save & Next
                 </button>
@@ -2527,17 +2682,51 @@ const EmployeeInformationForm = () => {
                 <div className=" flex items-center justify-center my-[10px]">
                   <button
                     type="button"
-                    className="text-[16px] leading-[16px] font-normal px-[20px] py-[10px] bg-[#0E99FF] text-white rounded-md border border-[#0E99FF] hover:bg-[#0e7eff] mr-[10px]" >
+                    className="text-[16px] leading-[16px] font-normal px-[20px] py-[10px] bg-[#0E99FF] text-white rounded-md border border-[#0E99FF] hover:bg-[#0e7eff] mr-[10px] cursor-pointer" >
                     Complete This Profile
                   </button>
                   <button
                     type="button"
-                    className="text-[16px] leading-[16px] font-normal px-[20px] py-[10px] bg-transparent border border-[#888888] text-[#888888] rounded-md hover:bg-[#a9aaaa] hover:text-[#000] ml-[10px]" >
+                    className="text-[16px] leading-[16px] font-normal px-[20px] py-[10px] bg-transparent border border-[#888888] text-[#888888] rounded-md hover:bg-[#a9aaaa] hover:text-[#000] ml-[10px] cursor-pointer" >
                     Create New Profile
                   </button>
                 </div>
 
                 <Link href="/" className="text-[#323232] text-[14px] leading-[22px] font-normal mt-[10px] inline underline hover:text-[#0E99FF]">Go to Dashboard</Link>
+            </div>
+            </div>
+          </div>
+      )}
+
+      {openModel && (
+         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0000008c] bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-lg py-[60px] px-6 w-[90%] max-w-[600px] relative">
+            <button onClick={() => setOpenModel(false)} className=" float-right right-0 absolute top-4 right-4">
+              {/* Cancel */}
+              <FontAwesomeIcon icon={faXmark} className="text-gray-700" />
+            </button>
+
+            <div className="flex items-center justify-center flex-col mt-[24px] text-center">
+                <div className="thumb-icon bg-[#E6F4FF] rounded-full w-[120px] h-[120px] flex items-center justify-center mb-[30px]" >
+                    <FontAwesomeIcon icon={faThumbsUp} className="text-[#0E99FF] text-[50px]"/>
+                </div>
+                <h4 className="text-[20px] leading-[24px] font-bold text-[#323232] mb-[5px]">Profile Successfully Created</h4>
+                <p className="text-[16px] leading-[20px] font-normal text-[#323232] pt-[5px] pb-[20px]">You’ve successfully completed the employee profile setup What would you like to do next?</p>
+
+                <div className=" flex items-center justify-center my-[10px]">
+                  <a href="/"
+                    
+                    className="text-[16px] leading-[16px] font-normal px-[20px] py-[10px] bg-[#0E99FF] text-white rounded-md border border-[#0E99FF] hover:bg-[#0e7eff] mr-[10px] cursor-pointer" >
+                    Go to Dashboard
+                  </a>
+                  <a href="/EmployeeInformationForm"
+                    //  onClick={() => setActiveCard("nextmodule") }
+                    className="text-[16px] leading-[16px] font-normal px-[20px] py-[10px] bg-transparent border border-[#888888] text-[#888888] rounded-md hover:bg-[#a9aaaa] hover:text-[#000] ml-[10px] cursor-pointer" >
+                    Create New Profile
+                  </a>
+                </div>
+
+                {/* <Link href="/" className="text-[#323232] text-[14px] leading-[22px] font-normal mt-[10px] inline underline hover:text-[#0E99FF]">Go to Dashboard</Link> */}
             </div>
             </div>
           </div>

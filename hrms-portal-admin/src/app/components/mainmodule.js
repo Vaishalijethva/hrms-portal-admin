@@ -154,10 +154,10 @@ export default function MainModule({ onLogout, onClick}){
                                     <InOutMetrics />
                                 </div>
                                 
-                                <div className="grid grid-cols-3 gap-[20px] mt-[15px]">
+                                {/* <div className="grid grid-cols-3 gap-[20px] mt-[15px]">
                                     <DepartmentWiseEmployees />
                                     <InOutMetrics />
-                                </div>
+                                </div> */}
                             </>
                         )}
                     </div>
